@@ -1,0 +1,1821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Career Pathways — CFA Wall Street</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════
+   TOKENS & RESET
+   ══════════════════════════════════════ */
+:root {
+  --red: #C8102E;
+  --red-dark: #9B0D23;
+  --red-soft: #E8344D;
+  --cream: #FDF8F0;
+  --cream-dark: #F5EDE0;
+  --warm-white: #FFFCF7;
+  --charcoal: #2B2B2B;
+  --charcoal-light: #4A4A4A;
+  --text: #3A3530;
+  --text-light: #7A7168;
+  --text-lighter: #A09890;
+  --border: #E8DFD4;
+  --border-light: #F0EAE2;
+  --gold: #C4912E;
+  --gold-light: #F0D68A;
+  --shadow-sm: 0 1px 3px rgba(43,43,43,.06);
+  --shadow-md: 0 4px 12px rgba(43,43,43,.08);
+  --shadow-lg: 0 8px 30px rgba(43,43,43,.12);
+  --radius: 8px;
+  --radius-lg: 14px;
+  --ease: cubic-bezier(.4,0,.2,1);
+  --dur: .25s;
+  /* path colors */
+  --path-leadership: #C8102E;
+  --path-training: #2D7D46;
+  --path-specialist: #1565A0;
+  --path-core: #8B6914;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: 'Source Sans 3', -apple-system, sans-serif;
+  background: var(--cream);
+  color: var(--text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100dvh;
+  padding-bottom: env(safe-area-inset-bottom, 0);
+  overflow-x: hidden;
+}
+
+/* Subtle noise overlay */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 9999;
+}
+
+h1,h2,h3 { font-family: 'Playfair Display', Georgia, serif; font-weight: 600; line-height: 1.25; color: var(--charcoal); }
+h1 { font-size: clamp(1.8rem, 4.5vw, 2.8rem); letter-spacing: -.02em; }
+h2 { font-size: clamp(1.4rem, 3vw, 1.9rem); }
+h3 { font-size: 1.15rem; }
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-size: inherit;
+}
+
+/* ══════════════════════════════════════
+   LAYER 1 — CAREER MAP
+   ══════════════════════════════════════ */
+#app { position: relative; }
+
+.map-header {
+  background: linear-gradient(165deg, var(--charcoal) 0%, #1a1a1a 40%, var(--red-dark) 100%);
+  color: #fff;
+  padding: clamp(2.5rem, 6vw, 4rem) clamp(1rem, 4vw, 2rem) 1.5rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.map-header::before {
+  content: '';
+  position: absolute; top: -50%; right: -20%; width: 70%; height: 200%;
+  background: radial-gradient(ellipse, rgba(200,16,46,.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+.map-header h1 { color: #fff; margin-bottom: .5rem; }
+.map-header p { color: rgba(255,255,255,.7); font-size: 1.05rem; max-width: 520px; margin: 0 auto; }
+
+/* Map container */
+.career-map {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 2rem clamp(1rem, 3vw, 2rem) 6rem;
+  position: relative;
+}
+
+/* SVG arrow layer */
+.map-svg {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+.map-svg line, .map-svg path {
+  stroke-width: 2;
+  fill: none;
+  opacity: .35;
+}
+
+/* Grid layout for nodes */
+.map-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: auto;
+  gap: 1.25rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* Role node card */
+.role-node {
+  background: var(--warm-white);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1rem .875rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all var(--dur) var(--ease);
+  position: relative;
+  min-height: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+}
+.role-node:hover, .role-node:focus-visible {
+  border-color: var(--red);
+  box-shadow: var(--shadow-md), 0 0 0 3px rgba(200,16,46,.1);
+  transform: translateY(-2px);
+}
+.role-node.active {
+  border-color: var(--red);
+  box-shadow: 0 0 0 3px rgba(200,16,46,.18);
+  z-index: 10;
+}
+
+.role-node .rank-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  font-size: .7rem;
+  font-weight: 700;
+  margin-bottom: .4rem;
+  color: #fff;
+}
+.role-node .role-name {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 600;
+  font-size: .92rem;
+  color: var(--charcoal);
+  line-height: 1.2;
+  margin-bottom: .25rem;
+}
+.role-node .role-tagline {
+  font-size: .72rem;
+  color: var(--text-light);
+  line-height: 1.3;
+}
+
+/* Path-specific badge colors */
+.badge-leadership { background: var(--path-leadership); }
+.badge-training { background: var(--path-training); }
+.badge-specialist { background: var(--path-specialist); }
+.badge-core { background: var(--path-core); }
+
+/* Grid placement */
+.node-tm           { grid-column: 3; grid-row: 1; }
+.node-trainer      { grid-column: 2; grid-row: 2; }
+.node-specialist   { grid-column: 4; grid-row: 2; }
+.node-core         { grid-column: 5; grid-row: 2; }
+.node-tl           { grid-column: 1; grid-row: 3; }
+.node-spec-trainer { grid-column: 3; grid-row: 3; }
+.node-ad           { grid-column: 1; grid-row: 4; }
+.node-ops-dir      { grid-column: 1; grid-row: 5; }
+.node-spc-dir      { grid-column: 2; grid-row: 5; }
+
+/* Node tooltip on click */
+.node-actions {
+  position: absolute;
+  bottom: -52px; left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: .4rem;
+  z-index: 10;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .15s;
+}
+.role-node.active .node-actions {
+  opacity: 1;
+  pointer-events: auto;
+}
+.node-actions button {
+  padding: .35rem .65rem;
+  border-radius: 20px;
+  font-size: .72rem;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: all .15s;
+}
+.btn-here {
+  background: var(--charcoal);
+  color: #fff;
+}
+.btn-here:hover { background: #000; }
+.btn-want {
+  background: var(--red);
+  color: #fff;
+}
+.btn-want:hover { background: var(--red-dark); }
+
+/* Plan My Path CTA */
+.plan-cta {
+  text-align: center;
+  padding: 1.5rem 1rem 0;
+}
+.plan-cta button {
+  background: var(--red);
+  color: #fff;
+  font-size: 1.05rem;
+  font-weight: 600;
+  padding: .85rem 2.5rem;
+  border-radius: 50px;
+  transition: all var(--dur) var(--ease);
+  box-shadow: var(--shadow-md);
+}
+.plan-cta button:hover { background: var(--red-dark); transform: translateY(-1px); box-shadow: var(--shadow-lg); }
+
+/* Legend */
+.map-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .75rem 1.5rem;
+  justify-content: center;
+  padding: 1.25rem 1rem 0;
+  font-size: .78rem;
+  color: var(--text-light);
+}
+.map-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+}
+.map-legend span::before {
+  content: '';
+  display: block;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+}
+.legend-leadership::before { background: var(--path-leadership); }
+.legend-training::before { background: var(--path-training); }
+.legend-specialist::before { background: var(--path-specialist); }
+.legend-core::before { background: var(--path-core); }
+
+/* ══════════════════════════════════════
+   LAYER 2 — BOTTOM SHEET / SELECTOR
+   ══════════════════════════════════════ */
+.sheet-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.35);
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .3s;
+}
+.sheet-backdrop.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.bottom-sheet {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: var(--warm-white);
+  border-radius: 20px 20px 0 0;
+  z-index: 101;
+  transform: translateY(100%);
+  transition: transform .35s var(--ease);
+  max-height: 85dvh;
+  overflow-y: auto;
+  padding: 0 clamp(1rem, 4vw, 2rem) calc(1.5rem + env(safe-area-inset-bottom, 0));
+  box-shadow: 0 -8px 30px rgba(0,0,0,.15);
+}
+.bottom-sheet.open {
+  transform: translateY(0);
+}
+
+.sheet-handle {
+  display: flex;
+  justify-content: center;
+  padding: .75rem 0 .5rem;
+  position: sticky;
+  top: 0;
+  background: var(--warm-white);
+  z-index: 2;
+}
+.sheet-handle::before {
+  content: '';
+  width: 36px; height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+}
+
+.sheet-title {
+  font-size: 1.3rem;
+  text-align: center;
+  margin-bottom: 1.25rem;
+}
+
+.selector-row {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+@media (min-width: 600px) {
+  .selector-row { flex-direction: row; gap: 1rem; }
+  .selector-group { flex: 1; }
+}
+.selector-group label {
+  display: block;
+  font-size: .8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--text-light);
+  margin-bottom: .35rem;
+}
+.selector-group select {
+  width: 100%;
+  padding: .7rem 1rem;
+  font-family: inherit;
+  font-size: 1rem;
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  background: #fff;
+  color: var(--charcoal);
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%237A7168' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  cursor: pointer;
+  transition: border-color .15s;
+}
+.selector-group select:focus {
+  outline: none;
+  border-color: var(--red);
+}
+
+.runway-preview {
+  text-align: center;
+  padding: .75rem;
+  background: var(--cream);
+  border-radius: var(--radius);
+  margin-bottom: 1rem;
+  font-size: .9rem;
+  color: var(--text-light);
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.runway-preview strong {
+  color: var(--red);
+  font-size: 1.1rem;
+}
+
+.sheet-go {
+  width: 100%;
+  padding: .85rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  background: var(--red);
+  color: #fff;
+  border-radius: var(--radius);
+  transition: background .15s;
+  min-height: 48px;
+}
+.sheet-go:hover { background: var(--red-dark); }
+.sheet-go:disabled {
+  background: var(--border);
+  color: var(--text-lighter);
+  cursor: not-allowed;
+}
+
+/* Desktop: sheet becomes an inline card */
+@media (min-width: 768px) {
+  .sheet-backdrop { display: none; }
+  .bottom-sheet {
+    position: relative;
+    transform: none;
+    max-width: 640px;
+    margin: -1.5rem auto 0;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    display: none;
+    padding-bottom: 1.5rem;
+  }
+  .bottom-sheet.open {
+    display: block;
+    transform: none;
+  }
+  .sheet-handle { display: none; }
+}
+
+/* ══════════════════════════════════════
+   LAYER 3 — ROADMAP STEPPER
+   ══════════════════════════════════════ */
+.roadmap-view {
+  display: none;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 clamp(1rem, 3vw, 2rem) 4rem;
+}
+.roadmap-view.visible { display: block; }
+
+.roadmap-back {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  padding: .5rem 1rem;
+  font-size: .9rem;
+  font-weight: 600;
+  color: var(--text-light);
+  border-radius: var(--radius);
+  margin: 1.5rem 0 1rem;
+  transition: color .15s;
+}
+.roadmap-back:hover { color: var(--red); }
+.roadmap-back svg { width: 16px; height: 16px; }
+
+.roadmap-title {
+  margin-bottom: .35rem;
+}
+.roadmap-subtitle {
+  color: var(--text-light);
+  font-size: .95rem;
+  margin-bottom: 2rem;
+}
+
+/* Timeline spine */
+.timeline {
+  position: relative;
+  padding-left: 2.25rem;
+}
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 9px;
+  top: 12px;
+  bottom: 12px;
+  width: 2px;
+  background: var(--border);
+}
+
+.step {
+  position: relative;
+  margin-bottom: 2rem;
+}
+.step:last-child { margin-bottom: 0; }
+
+/* Timeline dot */
+.step::before {
+  content: '';
+  position: absolute;
+  left: -2.25rem;
+  top: .35rem;
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: var(--warm-white);
+  border: 3px solid var(--red);
+  z-index: 1;
+}
+.step .step-number {
+  position: absolute;
+  left: -2.25rem;
+  top: .35rem;
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: var(--red);
+  color: #fff;
+  font-size: .65rem;
+  font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  z-index: 2;
+}
+
+.step-card {
+  background: var(--warm-white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.step-header {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--border-light);
+}
+.step-header .step-from-to {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: var(--charcoal);
+  margin-bottom: .25rem;
+}
+.step-header .step-runway {
+  font-size: .82rem;
+  color: var(--text-light);
+}
+.step-header .step-runway strong {
+  color: var(--red);
+}
+
+/* Key question callout */
+.key-question {
+  background: linear-gradient(135deg, #FFF8F0, #FFF3E6);
+  border-left: 4px solid var(--gold);
+  padding: 1rem 1.25rem;
+  font-style: italic;
+  color: var(--charcoal);
+  font-size: .95rem;
+  line-height: 1.5;
+}
+.key-question .kq-label {
+  font-style: normal;
+  font-size: .7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--gold);
+  display: block;
+  margin-bottom: .25rem;
+}
+
+/* Recommends / approves */
+.step-meta {
+  display: flex;
+  gap: 1.5rem;
+  padding: .75rem 1.25rem;
+  font-size: .8rem;
+  color: var(--text-light);
+  border-bottom: 1px solid var(--border-light);
+}
+.step-meta span { display: flex; align-items: center; gap: .3rem; }
+.step-meta strong { color: var(--charcoal); font-weight: 600; }
+
+/* Expandable sections */
+.expand-section {
+  border-bottom: 1px solid var(--border-light);
+}
+.expand-section:last-child { border-bottom: none; }
+
+.expand-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: .85rem 1.25rem;
+  font-size: .9rem;
+  font-weight: 600;
+  color: var(--charcoal);
+  text-align: left;
+  transition: background .15s;
+  min-height: 48px;
+  -webkit-tap-highlight-color: transparent;
+}
+.expand-trigger:hover { background: rgba(0,0,0,.02); }
+.expand-trigger .badge-count {
+  background: var(--cream-dark);
+  color: var(--text-light);
+  font-size: .7rem;
+  font-weight: 700;
+  padding: .15rem .5rem;
+  border-radius: 12px;
+  margin-left: .5rem;
+}
+.expand-trigger .chevron {
+  width: 18px; height: 18px;
+  transition: transform .2s var(--ease);
+  color: var(--text-lighter);
+  flex-shrink: 0;
+}
+.expand-section.open .expand-trigger .chevron {
+  transform: rotate(180deg);
+}
+
+.expand-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .3s var(--ease);
+}
+.expand-section.open > .expand-body {
+  max-height: 3000px;
+}
+
+.expand-content {
+  padding: 0 1.25rem 1rem;
+}
+
+/* Competency item inside expanded section */
+.comp-item {
+  margin-bottom: .75rem;
+}
+.comp-item:last-child { margin-bottom: 0; }
+.comp-item .comp-name {
+  font-weight: 600;
+  color: var(--charcoal);
+  font-size: .88rem;
+  margin-bottom: .15rem;
+}
+.comp-item .comp-desc {
+  font-size: .82rem;
+  color: var(--text-light);
+  line-height: 1.45;
+  margin-bottom: .35rem;
+}
+
+/* Nested rubric expander */
+.rubric-toggle {
+  font-size: .75rem;
+  font-weight: 600;
+  color: var(--red);
+  padding: .2rem 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: .25rem;
+  transition: color .15s;
+  background: none; border: none;
+}
+.rubric-toggle:hover { color: var(--red-dark); }
+.rubric-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .3s var(--ease);
+}
+.rubric-body.open {
+  max-height: 1200px;
+}
+.rubric-grid {
+  display: grid;
+  gap: .5rem;
+  padding: .5rem 0 .25rem;
+}
+.rubric-level {
+  background: var(--cream);
+  border-radius: var(--radius);
+  padding: .6rem .75rem;
+  font-size: .78rem;
+  line-height: 1.4;
+}
+.rubric-level .rl-label {
+  font-weight: 700;
+  color: var(--charcoal);
+  font-size: .72rem;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  margin-bottom: .15rem;
+}
+.rubric-level.graduation { border-left: 3px solid var(--red); }
+
+/* Operational skills list */
+.ops-list {
+  list-style: none;
+  padding: 0;
+}
+.ops-list li {
+  position: relative;
+  padding: .3rem 0 .3rem 1.1rem;
+  font-size: .82rem;
+  color: var(--text);
+  line-height: 1.4;
+}
+.ops-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: .55rem;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--border);
+}
+
+/* ══════════════════════════════════════
+   MOBILE ADJUSTMENTS
+   ══════════════════════════════════════ */
+@media (max-width: 640px) {
+  .map-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: .75rem;
+  }
+  .node-tm           { grid-column: 2; grid-row: 1; }
+  .node-trainer      { grid-column: 1; grid-row: 2; }
+  .node-specialist   { grid-column: 3; grid-row: 2; }
+  .node-core         { grid-column: 2; grid-row: 2; }
+  .node-tl           { grid-column: 1; grid-row: 3; }
+  .node-spec-trainer { grid-column: 3; grid-row: 3; }
+  .node-ad           { grid-column: 1; grid-row: 4; }
+  .node-ops-dir      { grid-column: 1; grid-row: 5; }
+  .node-spc-dir      { grid-column: 2; grid-row: 5; }
+
+  .role-node {
+    padding: .75rem .5rem;
+    min-height: 80px;
+  }
+  .role-node .role-name { font-size: .8rem; }
+  .role-node .role-tagline { font-size: .65rem; }
+  .role-node .rank-badge { width: 24px; height: 24px; font-size: .62rem; }
+
+  .node-actions {
+    bottom: -46px;
+  }
+  .node-actions button { font-size: .65rem; padding: .3rem .5rem; }
+
+  .map-svg { display: none; }
+}
+
+@media (max-width: 380px) {
+  .map-grid {
+    grid-template-columns: 1fr;
+    gap: .6rem;
+  }
+  .node-tm, .node-trainer, .node-specialist, .node-core,
+  .node-tl, .node-spec-trainer, .node-ad, .node-ops-dir, .node-spc-dir {
+    grid-column: 1;
+    grid-row: auto;
+  }
+  .role-node {
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: .75rem;
+    text-align: left;
+    min-height: 56px;
+    padding: .6rem 1rem;
+  }
+  .role-node .rank-badge { margin-bottom: 0; }
+  .node-actions { display: none; }
+}
+
+/* ══════════════════════════════════════
+   UTILITY
+   ══════════════════════════════════════ */
+.sr-only {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0,0,0,0); border: 0;
+}
+</style>
+</head>
+<body>
+
+<div id="app">
+  <!-- LAYER 1: Career Map -->
+  <div id="map-view">
+    <header class="map-header">
+      <h1>Your Career Pathways</h1>
+      <p>See where you can go — and how to get there. Tap any role to start.</p>
+    </header>
+
+    <div class="career-map">
+      <svg class="map-svg" id="mapSvg" aria-hidden="true">
+        <defs>
+          <marker id="arrow-red" viewBox="0 0 10 8" refX="9" refY="4" markerWidth="8" markerHeight="6" orient="auto">
+            <path d="M0,0 L10,4 L0,8 Z" fill="var(--path-leadership)" opacity=".5"/>
+          </marker>
+          <marker id="arrow-green" viewBox="0 0 10 8" refX="9" refY="4" markerWidth="8" markerHeight="6" orient="auto">
+            <path d="M0,0 L10,4 L0,8 Z" fill="var(--path-training)" opacity=".5"/>
+          </marker>
+          <marker id="arrow-blue" viewBox="0 0 10 8" refX="9" refY="4" markerWidth="8" markerHeight="6" orient="auto">
+            <path d="M0,0 L10,4 L0,8 Z" fill="var(--path-specialist)" opacity=".5"/>
+          </marker>
+          <marker id="arrow-gold" viewBox="0 0 10 8" refX="9" refY="4" markerWidth="8" markerHeight="6" orient="auto">
+            <path d="M0,0 L10,4 L0,8 Z" fill="var(--path-core)" opacity=".5"/>
+          </marker>
+        </defs>
+      </svg>
+
+      <div class="map-grid" id="mapGrid">
+        <!-- Nodes rendered by JS -->
+      </div>
+
+      <div class="map-legend">
+        <span class="legend-leadership">Leadership</span>
+        <span class="legend-training">Training</span>
+        <span class="legend-specialist">Specialist</span>
+        <span class="legend-core">Core Contributor</span>
+      </div>
+
+      <div class="plan-cta">
+        <button onclick="openSheet()" aria-label="Plan My Path">Plan My Path</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- LAYER 2: Bottom Sheet Selector -->
+  <div class="sheet-backdrop" id="sheetBackdrop" onclick="closeSheet()"></div>
+  <div class="bottom-sheet" id="bottomSheet" role="dialog" aria-label="Path Selector">
+    <div class="sheet-handle"></div>
+    <h2 class="sheet-title">Plan My Path</h2>
+
+    <div class="selector-row">
+      <div class="selector-group">
+        <label for="fromRole">I am currently a…</label>
+        <select id="fromRole" onchange="onFromChange()">
+          <option value="">Select your role</option>
+        </select>
+      </div>
+      <div class="selector-group">
+        <label for="toRole">I want to become a…</label>
+        <select id="toRole" onchange="onToChange()" disabled>
+          <option value="">Select a goal</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="runway-preview" id="runwayPreview">
+      Select both roles to see your path
+    </div>
+
+    <button class="sheet-go" id="sheetGo" disabled onclick="showRoadmap()">Show My Roadmap</button>
+  </div>
+
+  <!-- LAYER 3: Roadmap Stepper -->
+  <div class="roadmap-view" id="roadmapView">
+    <button class="roadmap-back" onclick="backToMap()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      Back to Map
+    </button>
+
+    <h2 class="roadmap-title" id="roadmapTitle"></h2>
+    <p class="roadmap-subtitle" id="roadmapSubtitle"></p>
+
+    <div class="timeline" id="timeline"></div>
+  </div>
+</div>
+
+<script>
+/* ══════════════════════════════════════
+   DATA LAYER
+   ══════════════════════════════════════ */
+
+const ROLES = {
+  tm: {
+    id: 'tm', name: 'Team Member', shortName: 'TM',
+    rank: 1, badgeClass: 'badge-leadership',
+    tagline: 'Learn the heart',
+    gridClass: 'node-tm'
+  },
+  trainer: {
+    id: 'trainer', name: 'Certified Trainer', shortName: 'CT',
+    rank: 2, badgeClass: 'badge-leadership',
+    tagline: 'Lead through connection',
+    gridClass: 'node-trainer'
+  },
+  tl: {
+    id: 'tl', name: 'Team Leader', shortName: 'TL',
+    rank: 3, badgeClass: 'badge-leadership',
+    tagline: 'Lead through character',
+    gridClass: 'node-tl'
+  },
+  ad: {
+    id: 'ad', name: 'Asst Director', shortName: 'AD',
+    rank: 4, badgeClass: 'badge-leadership',
+    tagline: 'Lead through accountability',
+    gridClass: 'node-ad'
+  },
+  opsDir: {
+    id: 'opsDir', name: 'Ops Director', shortName: 'OD',
+    rank: 5, badgeClass: 'badge-leadership',
+    tagline: 'Lead through direction',
+    gridClass: 'node-ops-dir'
+  },
+  spcDir: {
+    id: 'spcDir', name: 'Specialty Director', shortName: 'SD',
+    rank: 5, badgeClass: 'badge-leadership',
+    tagline: 'Lead through direction',
+    gridClass: 'node-spc-dir'
+  },
+  specTrainer: {
+    id: 'specTrainer', name: 'Specialized Trainer', shortName: 'ST',
+    rank: 3, badgeClass: 'badge-training',
+    tagline: 'Lead through development',
+    gridClass: 'node-spec-trainer'
+  },
+  specialist: {
+    id: 'specialist', name: 'Station Specialist', shortName: 'SS',
+    rank: 2, badgeClass: 'badge-specialist',
+    tagline: 'Own your zone',
+    gridClass: 'node-specialist'
+  },
+  core: {
+    id: 'core', name: 'Core Contributor', shortName: 'CC',
+    rank: 1, badgeClass: 'badge-core',
+    tagline: 'Valued & reliable',
+    gridClass: 'node-core'
+  }
+};
+
+const TRANSITIONS = {
+  'tm->trainer': {
+    from: 'tm', to: 'trainer',
+    runway: '6 months',
+    runwayMonths: 6,
+    keyQuestion: 'Does this person treat people well enough and receive feedback well enough to be trusted with teaching others?',
+    recommendedBy: 'Trainer or Team Leader',
+    approvedBy: 'Director',
+    competencies: [
+      {
+        name: 'Caring',
+        description: 'The hospitality foundation — treat every guest and teammate with genuine warmth and dignity.',
+        rubric: [
+          { level: 1, label: 'Not Yet', text: 'Goes through the motions. Greeting feels scripted. Doesn\'t notice teammates or guests who need attention.' },
+          { level: 2, label: 'Emerging', text: 'Shows genuine care when things are calm, but loses it during rush or when stressed. Inconsistent.' },
+          { level: 3, label: 'Consistent', text: 'Maintains warmth and awareness even under pressure. Teammates and guests feel it reliably.', graduation: true },
+          { level: 4, label: 'Models', text: 'Other team members notice and comment on it. New hires naturally look to this person for how to treat people.' }
+        ]
+      },
+      {
+        name: 'Coachability',
+        description: 'The prerequisite for all growth — receive feedback openly, apply it visibly, and seek it proactively.',
+        rubric: [
+          { level: 1, label: 'Not Yet', text: 'Gets defensive, shuts down, or agrees in the moment but nothing changes.' },
+          { level: 2, label: 'Emerging', text: 'Accepts feedback gracefully but application is spotty. Needs reminding.' },
+          { level: 3, label: 'Consistent', text: 'Actively seeks feedback. Applies it. You can see growth week over week.', graduation: true },
+          { level: 4, label: 'Models', text: 'Asks for feedback regularly. Other team members notice their growth and are inspired by it.' }
+        ]
+      }
+    ],
+    operationalSkills: [
+      'Complete orientation (handbook, policies, food safety, culture)',
+      '3 station certifications on their side (FOH or BOH)',
+      'Orientation track complete'
+    ]
+  },
+
+  'trainer->tl': {
+    from: 'trainer', to: 'tl',
+    runway: '12 months',
+    runwayMonths: 12,
+    keyQuestion: 'Can this person lead a shift — staying present, holding the standard, coaching in real time, protecting the guest experience, and keeping the team connected? Do they have the character to do it consistently, even under pressure?',
+    recommendedBy: 'Director',
+    approvedBy: 'Operator',
+    competencies: [
+      {
+        name: 'Teamwork',
+        description: 'Create a positive climate that supports people doing their best. Share leadership.',
+        rubric: [
+          { level: 1, label: 'Not Yet', text: 'Hoards knowledge or does the work themselves because it\'s faster. Trainee feels like they\'re in the way.' },
+          { level: 2, label: 'Emerging', text: 'Supportive in calm moments but takes over when it gets busy. Shares knowledge when asked but doesn\'t proactively teach.' },
+          { level: 3, label: 'Consistent', text: 'Trainee feels set up for success even during rush. Actively shares leadership — trusts others to execute. Team is better when this person is on shift.', graduation: true },
+          { level: 4, label: 'Models', text: 'Other trainers look to this person for how to train well. Creates a ripple effect — people they\'ve trained go on to train others the same way.' }
+        ]
+      },
+      {
+        name: 'Caring (Deepened)',
+        description: 'Shifts from warmth toward guests to deep relational investment in the people you\'re developing.',
+        rubric: [
+          { level: 1, label: 'Not Yet', text: 'Focuses only on task completion. Doesn\'t notice or respond to the trainee\'s emotional state. Training feels mechanical.' },
+          { level: 2, label: 'Emerging', text: 'Shows care when things are going well, but gets frustrated when the trainee struggles. Adjusts approach sometimes but not consistently.' },
+          { level: 3, label: 'Consistent', text: 'Trainees feel genuinely cared for — not just trained. This person adapts naturally to each individual. You can see the trainee\'s confidence grow shift over shift.', graduation: true },
+          { level: 4, label: 'Models', text: 'Former trainees stay connected long after training ends. They\'re the one new hires ask to work with. Trainees don\'t just learn the job — they catch the culture.' }
+        ]
+      },
+      {
+        name: 'Interpersonal',
+        description: 'Own your part in conflict, listen openly to criticism, and seek to understand before responding.',
+        rubric: [
+          { level: 1, label: 'Not Yet', text: 'Blames others when things go wrong. Gets defensive when challenged. Avoids conflict or escalates it.' },
+          { level: 2, label: 'Emerging', text: 'Owns their part when things are calm, but defaults to defensiveness under pressure. Listens, but you can tell they\'re waiting to talk.' },
+          { level: 3, label: 'Consistent', text: 'Owns mistakes openly — the team sees it. Actively seeks to understand the other side. Team members feel heard when they bring issues to this person.', graduation: true },
+          { level: 4, label: 'Models', text: 'Conflict actually gets resolved around this person, not just managed. Others come to them when they need a fair perspective.' }
+        ]
+      },
+      {
+        name: 'Courage',
+        description: 'Surface tough issues, speak directly, address standard drift in real time — even with friends.',
+        rubric: [
+          { level: 1, label: 'Not Yet', text: 'Avoids confrontation. Lets standards slide to keep the peace. Talks about problems to others but not to the person involved.' },
+          { level: 2, label: 'Emerging', text: 'Addresses easy issues but avoids the hard ones — especially with friends or more experienced team members.' },
+          { level: 3, label: 'Consistent', text: 'Addresses issues in real time regardless of who\'s involved. Does it with respect and directness — the person doesn\'t feel attacked, but they know the standard.', graduation: true },
+          { level: 4, label: 'Models', text: 'The team\'s standards are visibly higher when this person leads. They\'ve earned the trust to give hard feedback because everyone knows it comes from care.' }
+        ]
+      },
+      {
+        name: 'Composure',
+        description: 'Stay calm under pressure. Your energy sets the tone for the whole shift.',
+        rubric: [
+          { level: 1, label: 'Not Yet', text: 'Visibly stressed during rush. Snaps at team members or gets frantic. The team can feel the anxiety.' },
+          { level: 2, label: 'Emerging', text: 'Holds composure in routine pressure but loses it during real crises. Recovery takes too long.' },
+          { level: 3, label: 'Consistent', text: 'Calm is the default, even when things go sideways. Team members feel steadied by this person\'s presence. Recovers quickly from setbacks.', graduation: true },
+          { level: 4, label: 'Models', text: 'The entire shift runs differently when this person is leading. Their composure is contagious — the team performs better under pressure because of the tone they set.' }
+        ]
+      }
+    ],
+    operationalSkills: [
+      'Train-the-Trainer certified',
+      'Orientation delivery demonstrated',
+      'Training standards knowledge demonstrated',
+      'Certified on most/all stations on their side',
+      'Basic cross-training on the other side',
+      'Shift management demonstrated',
+      'Cash/register management demonstrated',
+      'Guest recovery demonstrated',
+      'Food safety oversight demonstrated',
+      'Labor awareness demonstrated'
+    ]
+  },
+
+  'tl->ad': {
+    from: 'tl', to: 'ad',
+    runway: '12 months',
+    runwayMonths: 12,
+    keyQuestion: 'Can this person be trusted with strategic operational responsibility — systems, staffing, scheduling — that affects the whole restaurant? Are they developing leaders, making sound decisions, driving results, and doing it all with integrity?',
+    recommendedBy: 'Director',
+    approvedBy: 'Operator',
+    competencies: [
+      {
+        name: 'Mentoring',
+        description: 'Think about someone\'s development arc over time. Help them become the leader they could be six months from now.',
+        rubric: [
+          { level: 1, label: 'Not Yet', text: 'Focuses only on operational output. Doesn\'t think about the people below them as developing leaders. Feedback is purely task-corrective.' },
+          { level: 2, label: 'Emerging', text: 'Has good intentions about developing others but it\'s inconsistent. Does it when things are calm but drops it when operational pressure hits.' },
+          { level: 3, label: 'Consistent', text: 'Each leader under them can articulate what they\'re working on and why. Development is woven into how this person leads. You can see their people growing.', graduation: true },
+          { level: 4, label: 'Models', text: 'Has a track record — people they\'ve mentored have advanced and succeeded. Known across the restaurant as someone who builds leaders.' }
+        ]
+      },
+      {
+        name: 'Integrity',
+        description: 'Decisions about staffing, scheduling, and systems reflect values — even when it\'s inconvenient.',
+        rubric: [
+          { level: 1, label: 'Not Yet', text: 'Says the right things but actions don\'t match. Team members sense inconsistency. Plays favorites or makes exceptions that erode trust.' },
+          { level: 2, label: 'Emerging', text: 'Consistent when things are easy, but bends under pressure — takes shortcuts, makes exceptions for convenience.' },
+          { level: 3, label: 'Consistent', text: 'The team trusts this person\'s word completely. What they say matches what they do, even in the hard moments. Decisions are rooted in values, not convenience.', graduation: true },
+          { level: 4, label: 'Models', text: 'Their integrity is a reference point for the team — "What would they do?" Others hold themselves higher because of this person\'s example.' }
+        ]
+      },
+      {
+        name: 'Decisions',
+        description: 'Handle strategic operations efficiently. Make the tough calls in a timely manner.',
+        rubric: [
+          { level: 1, label: 'Not Yet', text: 'Avoids making decisions or constantly defers to the Director. Things that should take a day take a week.' },
+          { level: 2, label: 'Emerging', text: 'Makes routine decisions well but freezes on the tough ones — especially when someone might be unhappy.' },
+          { level: 3, label: 'Consistent', text: 'Makes timely decisions, including unpopular ones. Communicates the "why" clearly. When they get it wrong, they own it and adjust fast.', graduation: true },
+          { level: 4, label: 'Models', text: 'Decision-making is a strength the whole team benefits from. They\'ve developed a reputation for sound judgment.' }
+        ]
+      },
+      {
+        name: 'Results',
+        description: 'Accountable for outcomes, not just effort. Drive continuous improvement.',
+        rubric: [
+          { level: 1, label: 'Not Yet', text: 'Busy but not productive. Works hard but can\'t point to measurable outcomes. Starts initiatives but doesn\'t finish them.' },
+          { level: 2, label: 'Emerging', text: 'Delivers results when given clear direction but doesn\'t self-initiate. Hits targets when the path is obvious.' },
+          { level: 3, label: 'Consistent', text: 'Owns their outcomes. Can point to specific systems they\'ve built or improved and the measurable impact. Drives improvement without being asked.', graduation: true },
+          { level: 4, label: 'Models', text: 'The systems they\'ve built run without them. Their results speak for themselves and become the standard others try to replicate.' }
+        ]
+      }
+    ],
+    operationalSkills: [
+      'Cross-trained across both FOH and BOH',
+      'Scheduling (HotSchedules, labor targets, coverage balancing)',
+      'Staffing/labor management (labor cost, productivity targets)',
+      'Food cost basics (waste, inventory impact, cost of goods)',
+      'Vendor/supply management (ordering, inventory, delivery schedules)',
+      'Systems design (workflows, checklists, procedures, handoff processes)',
+      'Hiring support (screening, interviewing, onboarding coordination)',
+      'Basic P&L literacy'
+    ]
+  },
+
+  'ad->opsDir': {
+    from: 'ad', to: 'opsDir',
+    runway: '12 months (seat dependent)',
+    runwayMonths: 12,
+    keyQuestion: 'Can this person set direction for a team or function, design systems that make the restaurant better over time, and sustain themselves and their team for the long haul? And is there a seat available?',
+    recommendedBy: 'Operator',
+    approvedBy: 'Operator',
+    competencies: [
+      {
+        name: 'Vision',
+        description: 'Articulate where your team is headed and create alignment so people follow because they understand and believe.',
+        rubric: [
+          { level: 1, label: 'Not Yet', text: 'Manages tasks but doesn\'t set direction. The team works shift to shift without a sense of where they\'re building toward.' },
+          { level: 2, label: 'Emerging', text: 'Has a vision internally but hasn\'t translated it for the team. Team Leaders follow instructions but don\'t carry the vision themselves.' },
+          { level: 3, label: 'Consistent', text: 'Their team knows where they\'re going and why. Team Leaders can explain the direction without the Director present. Decisions feel coherent over time.', graduation: true },
+          { level: 4, label: 'Models', text: 'Their vision energizes people. Team members actively want to be part of what this Director is building. The vision survives their absence.' }
+        ]
+      },
+      {
+        name: 'Strategy',
+        description: 'Think in systems, not tasks. Design how to get there, not just see where to go.',
+        rubric: [
+          { level: 1, label: 'Not Yet', text: 'Reactive — fights the same fires repeatedly. Proposes solutions without thinking through consequences.' },
+          { level: 2, label: 'Emerging', text: 'Good at solving problems but still mostly reactive. Builds some systems but they break under pressure.' },
+          { level: 3, label: 'Consistent', text: 'Recurring problems get solved permanently because this person builds systems. Anticipates needs before they\'re urgent. Their area runs more smoothly over time.', graduation: true },
+          { level: 4, label: 'Models', text: 'Their systems become the template for other Directors. They think multiple moves ahead. Other Directors seek their input on strategic decisions.' }
+        ]
+      },
+      {
+        name: 'Balance',
+        description: 'A leadership competency, not a wellness perk. Know what only you can do, protect your energy, trust your leaders.',
+        rubric: [
+          { level: 1, label: 'Not Yet', text: 'Always busy but burning out. Can\'t delegate — personally involved in everything. The team sees an exhausted leader.' },
+          { level: 2, label: 'Emerging', text: 'Understands balance intellectually but can\'t practice it consistently. Delegates sometimes but takes things back when stressed.' },
+          { level: 3, label: 'Consistent', text: 'Has a sustainable rhythm. Delegates with trust. Shows up with energy when it matters most. Still investing in their own growth.', graduation: true },
+          { level: 4, label: 'Models', text: 'Their sustainability is contagious. Has designed their role around what only they can do. Still effective and energized years into the role.' }
+        ]
+      }
+    ],
+    operationalSkills: [
+      'Full operational proficiency across FOH and BOH',
+      'Full P&L ownership and accountability',
+      'Scheduling strategy (staffing model design, seasonal adjustments)',
+      'Hiring and talent decisions (full ownership)',
+      'Performance management (evaluations, development conversations, hard calls)',
+      'Annual/quarterly planning (goals, forecasting, improvement plans)',
+      'CFA compliance and audits',
+      'Cross-functional coordination with other Directors'
+    ]
+  },
+
+  'ad->spcDir': {
+    from: 'ad', to: 'spcDir',
+    runway: '12 months (seat dependent)',
+    runwayMonths: 12,
+    keyQuestion: 'Can this person set direction for a specialty function, design systems that make the restaurant better over time, and sustain themselves and their team for the long haul? And is there a seat available?',
+    recommendedBy: 'Operator',
+    approvedBy: 'Operator',
+    competencies: [
+      {
+        name: 'Vision',
+        description: 'Articulate where your specialty function is headed and create alignment across teams.',
+        rubric: [
+          { level: 1, label: 'Not Yet', text: 'Manages tasks but doesn\'t set direction. The team works shift to shift without a sense of where they\'re building toward.' },
+          { level: 2, label: 'Emerging', text: 'Has a vision internally but hasn\'t translated it for the team. Leaders follow instructions but don\'t carry the vision.' },
+          { level: 3, label: 'Consistent', text: 'Their team knows where they\'re going and why. Leaders can explain the direction without the Director present.', graduation: true },
+          { level: 4, label: 'Models', text: 'Their vision energizes people. Team members actively want to be part of what this Director is building.' }
+        ]
+      },
+      {
+        name: 'Strategy',
+        description: 'Think in systems, not tasks. Design how to get there for your specialty area.',
+        rubric: [
+          { level: 1, label: 'Not Yet', text: 'Reactive — fights the same fires repeatedly. Proposes solutions without thinking through consequences.' },
+          { level: 2, label: 'Emerging', text: 'Good at solving problems but still mostly reactive. Builds some systems but they break under pressure.' },
+          { level: 3, label: 'Consistent', text: 'Recurring problems get solved permanently. Anticipates needs. Their area runs more smoothly over time.', graduation: true },
+          { level: 4, label: 'Models', text: 'Their systems become the template for others. They think multiple moves ahead.' }
+        ]
+      },
+      {
+        name: 'Balance',
+        description: 'Know what only you can do, protect your energy, trust your leaders.',
+        rubric: [
+          { level: 1, label: 'Not Yet', text: 'Always busy but burning out. Can\'t delegate — personally involved in everything.' },
+          { level: 2, label: 'Emerging', text: 'Understands balance intellectually but can\'t practice it consistently.' },
+          { level: 3, label: 'Consistent', text: 'Has a sustainable rhythm. Delegates with trust. Shows up with energy when it matters most.', graduation: true },
+          { level: 4, label: 'Models', text: 'Their sustainability is contagious. Still effective and energized years into the role.' }
+        ]
+      }
+    ],
+    operationalSkills: [
+      'Full operational proficiency across FOH and BOH',
+      'Full P&L ownership and accountability',
+      'Scheduling strategy (staffing model design)',
+      'Hiring and talent decisions (full ownership)',
+      'Performance management',
+      'Annual/quarterly planning',
+      'CFA compliance and audits',
+      'Cross-functional coordination with other Directors'
+    ]
+  },
+
+  'trainer->specTrainer': {
+    from: 'trainer', to: 'specTrainer',
+    runway: '12 months',
+    runwayMonths: 12,
+    keyQuestion: 'Can this person develop other trainers, design training curriculum, and hold training standards even when it\'s difficult?',
+    recommendedBy: 'Talent Director + Director',
+    approvedBy: 'Talent Director + Director',
+    competencies: [
+      {
+        name: 'Mentoring',
+        description: 'You\'re now developing other trainers, not just trainees. Building people\'s competence so your zone runs well without you.',
+        rubric: [
+          { level: 1, label: 'Not Yet', text: 'Focuses only on operational output. Doesn\'t think about developing other trainers. Feedback is purely task-corrective.' },
+          { level: 2, label: 'Emerging', text: 'Has good intentions about developing others but it\'s inconsistent. Development conversations feel generic.' },
+          { level: 3, label: 'Consistent', text: 'Other trainers under them can articulate what they\'re working on. Development is woven into how this person leads.', graduation: true },
+          { level: 4, label: 'Models', text: 'Has a track record of trainers they\'ve developed who are now effective. Known as someone who builds strong trainers.' }
+        ]
+      },
+      {
+        name: 'Interpersonal',
+        description: 'Navigate the harder feedback conversations — telling someone they\'re not ready, working through disagreements about methods.',
+        rubric: [
+          { level: 1, label: 'Not Yet', text: 'Blames others when things go wrong. Gets defensive when challenged. Avoids conflict or escalates it.' },
+          { level: 2, label: 'Emerging', text: 'Owns their part when things are calm, but defaults to defensiveness under pressure.' },
+          { level: 3, label: 'Consistent', text: 'Owns mistakes openly. Actively seeks to understand the other side. People feel heard when they bring issues.', graduation: true },
+          { level: 4, label: 'Models', text: 'Conflict gets resolved around this person. Others come to them for a fair perspective.' }
+        ]
+      },
+      {
+        name: 'Courage',
+        description: 'Hold training standards even when it\'s easier to pass someone through. Push back on Directors if training is being shortcut.',
+        rubric: [
+          { level: 1, label: 'Not Yet', text: 'Avoids confrontation. Lets training standards slide to keep the peace.' },
+          { level: 2, label: 'Emerging', text: 'Addresses easy issues but avoids the hard ones — especially with more experienced team members.' },
+          { level: 3, label: 'Consistent', text: 'Holds training standards in real time regardless of who\'s involved. Does it with respect and directness.', graduation: true },
+          { level: 4, label: 'Models', text: 'Training standards are visibly higher because of this person. They\'ve earned trust to give hard feedback.' }
+        ]
+      }
+    ],
+    operationalSkills: [
+      'Certified on majority of stations on their side',
+      'Curriculum design (create and refine training materials)',
+      'Training assessment (evaluate trainee readiness for certification)',
+      'Best practice development (identify and document better methods)',
+      'Cross-trainer coordination (consistency across 4 teams and Talent Director)'
+    ]
+  },
+
+  'tm->specialist': {
+    from: 'tm', to: 'specialist',
+    runway: 'Ongoing (no fixed timeline)',
+    runwayMonths: 0,
+    keyQuestion: 'Does this person own the standard in their zone, drive measurable improvement, and develop others\' skills in their area?',
+    recommendedBy: 'Team Leader or Director',
+    approvedBy: 'Director',
+    competencies: [
+      {
+        name: 'Courage',
+        description: 'You own the standard in your zone. When shortcuts are being taken — during rush, short-staffed — you speak up.',
+        rubric: [
+          { level: 1, label: 'Not Yet', text: 'Doesn\'t speak up when standards slip. Goes along with shortcuts during busy periods.' },
+          { level: 2, label: 'Emerging', text: 'Speaks up sometimes but backs down when challenged or under pressure.' },
+          { level: 3, label: 'Consistent', text: 'Holds the standard in their zone consistently, even during rush. Says "that\'s not how we do it here" when needed.', graduation: true },
+          { level: 4, label: 'Models', text: 'The standard in their zone is visibly higher because they\'re there. Others follow their lead naturally.' }
+        ]
+      },
+      {
+        name: 'Results',
+        description: 'Your zone gets measurably better because you\'re in it. Speed, quality, efficiency, guest experience — you drive them.',
+        rubric: [
+          { level: 1, label: 'Not Yet', text: 'Maintains but doesn\'t improve. Can\'t point to how their zone has gotten better.' },
+          { level: 2, label: 'Emerging', text: 'Shows improvement in some areas but inconsistent. Doesn\'t track metrics proactively.' },
+          { level: 3, label: 'Consistent', text: 'Can point to specific improvements they\'ve driven. Their zone\'s metrics are strong because of their presence.', graduation: true },
+          { level: 4, label: 'Models', text: 'Their zone becomes the benchmark. Others study what they do to replicate it.' }
+        ]
+      },
+      {
+        name: 'Mentoring',
+        description: 'Develop others\' skills in your area — not just showing them once, but building real competence.',
+        rubric: [
+          { level: 1, label: 'Not Yet', text: 'Keeps knowledge to themselves. Shows someone once and expects them to get it.' },
+          { level: 2, label: 'Emerging', text: 'Willing to teach but doesn\'t follow through. Trainee can do basics but not handle pressure.' },
+          { level: 3, label: 'Consistent', text: 'Builds real competence in others. Their zone runs well even when they\'re not on shift.', graduation: true },
+          { level: 4, label: 'Models', text: 'Has developed multiple people who can now run the zone independently. Their teaching methods are adopted by others.' }
+        ]
+      }
+    ],
+    operationalSkills: [
+      'Expert-level mastery of their specific operational zone',
+      'Performance metrics ownership (speed, accuracy, quality, guest satisfaction)',
+      'Process improvement (identify friction points, implement solutions)',
+      'Standard documentation (maintain and update area procedures)',
+      'Area-specific training (train others in specialty procedures)'
+    ]
+  },
+
+  'specialist->tl': {
+    from: 'specialist', to: 'tl',
+    runway: '12 months',
+    runwayMonths: 12,
+    keyQuestion: 'Can this Station Specialist extend their zone ownership into full shift leadership? Do they have the Interpersonal skills and Composure to lead a whole team, not just their area?',
+    recommendedBy: 'Director',
+    approvedBy: 'Operator',
+    competencies: [
+      {
+        name: 'Interpersonal',
+        description: 'Extend beyond your zone — own your part in conflict, listen openly, seek to understand across the whole team.',
+        rubric: [
+          { level: 1, label: 'Not Yet', text: 'Strong in their zone but blames others when broader team issues arise. Gets defensive when challenged on non-specialty topics.' },
+          { level: 2, label: 'Emerging', text: 'Owns their part in specialty-related conflicts but struggles with broader team dynamics.' },
+          { level: 3, label: 'Consistent', text: 'Owns mistakes openly across all areas. Team members feel heard when they bring any issue to this person.', graduation: true },
+          { level: 4, label: 'Models', text: 'Conflict gets resolved around this person. Others come to them for perspective on any team issue, not just their specialty.' }
+        ]
+      },
+      {
+        name: 'Composure',
+        description: 'Stay calm under pressure across the whole shift, not just in your zone. Your energy sets the tone for everyone.',
+        rubric: [
+          { level: 1, label: 'Not Yet', text: 'Calm in their zone but anxious or overwhelmed when managing the broader shift.' },
+          { level: 2, label: 'Emerging', text: 'Holds composure in routine situations but loses it when multiple areas need attention simultaneously.' },
+          { level: 3, label: 'Consistent', text: 'Calm is the default across the whole shift. Team members feel steadied by this person\'s presence.', graduation: true },
+          { level: 4, label: 'Models', text: 'The entire shift runs differently when this person leads. Their composure is contagious.' }
+        ]
+      }
+    ],
+    operationalSkills: [
+      'Certified on most/all stations on their side (not just specialty)',
+      'Basic cross-training on the other side',
+      'Shift management demonstrated',
+      'Cash/register management demonstrated',
+      'Guest recovery demonstrated',
+      'Food safety oversight demonstrated',
+      'Labor awareness demonstrated'
+    ]
+  },
+
+  'tm->core': {
+    from: 'tm', to: 'core',
+    runway: 'No fixed runway',
+    runwayMonths: 0,
+    keyQuestion: 'What do you want your time here to look like? Both "I want to grow" and "I just need a good job with good people" are respected answers.',
+    recommendedBy: '—',
+    approvedBy: '—',
+    competencies: [
+      {
+        name: 'Caring (Baseline)',
+        description: 'Maintain the hospitality foundation — treat every guest and teammate with genuine warmth.',
+        rubric: [
+          { level: 1, label: 'Not Yet', text: 'Goes through the motions. Doesn\'t connect with guests or teammates.' },
+          { level: 2, label: 'Emerging', text: 'Shows warmth when things are calm. Minimum maintained.', graduation: true },
+          { level: 3, label: 'Consistent', text: 'Maintains warmth reliably. A steady, caring presence on the team.' },
+          { level: 4, label: 'Models', text: 'Others notice and appreciate the consistent care this person brings every shift.' }
+        ]
+      },
+      {
+        name: 'Coachability (Baseline)',
+        description: 'Stay open to feedback and meet expectations. No pressure to pursue development beyond this.',
+        rubric: [
+          { level: 1, label: 'Not Yet', text: 'Resistant to feedback or doesn\'t apply it.' },
+          { level: 2, label: 'Emerging', text: 'Receives feedback and applies it. Meets expectations reliably.', graduation: true },
+          { level: 3, label: 'Consistent', text: 'Actively receptive. Applies feedback naturally.' },
+          { level: 4, label: 'Models', text: 'Inspires others with their quiet growth and consistency.' }
+        ]
+      }
+    ],
+    operationalSkills: [
+      'Reliable attendance and punctuality',
+      'Meets baseline performance expectations',
+      'Optional: Additional station certifications',
+      'Optional: Deeper mastery in existing stations',
+      'Recognition through badge system (Steadfast Contributor, Heart of Hospitality, etc.)'
+    ]
+  }
+};
+
+// Adjacency list for BFS
+const GRAPH = {
+  tm:          ['trainer', 'specialist', 'core'],
+  trainer:     ['tl', 'specTrainer'],
+  tl:          ['ad'],
+  ad:          ['opsDir', 'spcDir'],
+  opsDir:      [],
+  spcDir:      [],
+  specTrainer: [],
+  specialist:  ['tl'],
+  core:        []
+};
+
+/* ══════════════════════════════════════
+   BFS PATHFINDING
+   ══════════════════════════════════════ */
+function findPath(fromId, toId) {
+  if (fromId === toId) return [];
+  const visited = new Set([fromId]);
+  const queue = [[fromId, [fromId]]];
+  while (queue.length) {
+    const [node, path] = queue.shift();
+    for (const neighbor of (GRAPH[node] || [])) {
+      if (visited.has(neighbor)) continue;
+      visited.add(neighbor);
+      const newPath = [...path, neighbor];
+      if (neighbor === toId) return newPath;
+      queue.push([neighbor, newPath]);
+    }
+  }
+  return null; // unreachable
+}
+
+function getReachable(fromId) {
+  const visited = new Set([fromId]);
+  const queue = [fromId];
+  while (queue.length) {
+    const node = queue.shift();
+    for (const neighbor of (GRAPH[node] || [])) {
+      if (!visited.has(neighbor)) {
+        visited.add(neighbor);
+        queue.push(neighbor);
+      }
+    }
+  }
+  visited.delete(fromId);
+  return visited;
+}
+
+function pathToTransitions(path) {
+  const result = [];
+  for (let i = 0; i < path.length - 1; i++) {
+    const key = path[i] + '->' + path[i + 1];
+    if (TRANSITIONS[key]) result.push(TRANSITIONS[key]);
+  }
+  return result;
+}
+
+function totalRunway(transitions) {
+  return transitions.reduce((sum, t) => sum + t.runwayMonths, 0);
+}
+
+function formatRunway(months) {
+  if (months === 0) return 'No fixed timeline';
+  if (months < 12) return months + ' months';
+  const years = Math.floor(months / 12);
+  const rem = months % 12;
+  if (rem === 0) return years + (years === 1 ? ' year' : ' years');
+  return years + (years === 1 ? ' year' : ' years') + ', ' + rem + ' months';
+}
+
+/* ══════════════════════════════════════
+   RENDER MAP
+   ══════════════════════════════════════ */
+let activeNode = null;
+
+function renderMap() {
+  const grid = document.getElementById('mapGrid');
+  grid.innerHTML = '';
+
+  for (const role of Object.values(ROLES)) {
+    const div = document.createElement('div');
+    div.className = `role-node ${role.gridClass}`;
+    div.setAttribute('tabindex', '0');
+    div.setAttribute('role', 'button');
+    div.setAttribute('aria-label', role.name);
+    div.dataset.roleId = role.id;
+
+    div.innerHTML = `
+      <span class="rank-badge ${role.badgeClass}">${role.rank}</span>
+      <span class="role-name">${role.name}</span>
+      <span class="role-tagline">${role.tagline}</span>
+      <div class="node-actions">
+        <button class="btn-here" onclick="event.stopPropagation(); setFrom('${role.id}')">I'm here</button>
+        <button class="btn-want" onclick="event.stopPropagation(); setTarget('${role.id}')">I want this</button>
+      </div>
+    `;
+
+    div.addEventListener('click', () => toggleNode(role.id));
+    div.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleNode(role.id); }
+    });
+
+    grid.appendChild(div);
+  }
+
+  drawArrows();
+}
+
+function toggleNode(id) {
+  const nodes = document.querySelectorAll('.role-node');
+  nodes.forEach(n => {
+    if (n.dataset.roleId === id) {
+      n.classList.toggle('active');
+      activeNode = n.classList.contains('active') ? id : null;
+    } else {
+      n.classList.remove('active');
+    }
+  });
+}
+
+/* ══════════════════════════════════════
+   SVG ARROWS
+   ══════════════════════════════════════ */
+function drawArrows() {
+  const svg = document.getElementById('mapSvg');
+  // Clear existing lines
+  while (svg.children.length > 1) svg.removeChild(svg.lastChild);
+
+  if (window.innerWidth <= 640) return; // no arrows on small screens
+
+  const edges = [
+    { from: 'tm', to: 'trainer', color: 'var(--path-leadership)', marker: 'arrow-red' },
+    { from: 'trainer', to: 'tl', color: 'var(--path-leadership)', marker: 'arrow-red' },
+    { from: 'tl', to: 'ad', color: 'var(--path-leadership)', marker: 'arrow-red' },
+    { from: 'ad', to: 'opsDir', color: 'var(--path-leadership)', marker: 'arrow-red' },
+    { from: 'ad', to: 'spcDir', color: 'var(--path-leadership)', marker: 'arrow-red' },
+    { from: 'trainer', to: 'specTrainer', color: 'var(--path-training)', marker: 'arrow-green' },
+    { from: 'tm', to: 'specialist', color: 'var(--path-specialist)', marker: 'arrow-blue' },
+    { from: 'specialist', to: 'tl', color: 'var(--path-specialist)', marker: 'arrow-blue' },
+    { from: 'tm', to: 'core', color: 'var(--path-core)', marker: 'arrow-gold' },
+  ];
+
+  const grid = document.getElementById('mapGrid');
+  const gridRect = grid.getBoundingClientRect();
+  const svgRect = svg.getBoundingClientRect();
+
+  edges.forEach(edge => {
+    const fromEl = grid.querySelector(`[data-role-id="${edge.from}"]`);
+    const toEl = grid.querySelector(`[data-role-id="${edge.to}"]`);
+    if (!fromEl || !toEl) return;
+
+    const fromRect = fromEl.getBoundingClientRect();
+    const toRect = toEl.getBoundingClientRect();
+
+    const x1 = fromRect.left + fromRect.width / 2 - svgRect.left;
+    const y1 = fromRect.top + fromRect.height / 2 - svgRect.top;
+    const x2 = toRect.left + toRect.width / 2 - svgRect.left;
+    const y2 = toRect.top + toRect.height / 2 - svgRect.top;
+
+    // Shorten endpoints to stop at node borders
+    const angle = Math.atan2(y2 - y1, x2 - x1);
+    const startOffset = Math.min(fromRect.width, fromRect.height) / 2 + 4;
+    const endOffset = Math.min(toRect.width, toRect.height) / 2 + 4;
+
+    const sx = x1 + Math.cos(angle) * startOffset;
+    const sy = y1 + Math.sin(angle) * startOffset;
+    const ex = x2 - Math.cos(angle) * endOffset;
+    const ey = y2 - Math.sin(angle) * endOffset;
+
+    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('x1', sx);
+    line.setAttribute('y1', sy);
+    line.setAttribute('x2', ex);
+    line.setAttribute('y2', ey);
+    line.setAttribute('stroke', edge.color);
+    line.setAttribute('marker-end', `url(#${edge.marker})`);
+    svg.appendChild(line);
+  });
+}
+
+/* ══════════════════════════════════════
+   SHEET CONTROLS
+   ══════════════════════════════════════ */
+let selectedFrom = '';
+let selectedTo = '';
+
+function openSheet() {
+  document.getElementById('sheetBackdrop').classList.add('open');
+  document.getElementById('bottomSheet').classList.add('open');
+}
+
+function closeSheet() {
+  document.getElementById('sheetBackdrop').classList.remove('open');
+  document.getElementById('bottomSheet').classList.remove('open');
+}
+
+function setFrom(roleId) {
+  selectedFrom = roleId;
+  openSheet();
+  const sel = document.getElementById('fromRole');
+  sel.value = roleId;
+  onFromChange();
+}
+
+function setTarget(roleId) {
+  if (!selectedFrom) {
+    selectedFrom = ''; // force them to pick from
+    openSheet();
+    return;
+  }
+  selectedTo = roleId;
+  openSheet();
+  const sel = document.getElementById('toRole');
+  sel.value = roleId;
+  onToChange();
+}
+
+function populateFromDropdown() {
+  const sel = document.getElementById('fromRole');
+  // Only roles that have outgoing edges
+  const startRoles = ['tm', 'trainer', 'tl', 'ad', 'specialist'];
+  startRoles.forEach(id => {
+    const opt = document.createElement('option');
+    opt.value = id;
+    opt.textContent = ROLES[id].name;
+    sel.appendChild(opt);
+  });
+}
+
+function onFromChange() {
+  const fromId = document.getElementById('fromRole').value;
+  selectedFrom = fromId;
+  const toSel = document.getElementById('toRole');
+
+  // Reset
+  toSel.innerHTML = '<option value="">Select a goal</option>';
+  toSel.disabled = !fromId;
+  selectedTo = '';
+  updatePreview();
+
+  if (!fromId) return;
+
+  const reachable = getReachable(fromId);
+  reachable.forEach(id => {
+    const opt = document.createElement('option');
+    opt.value = id;
+    const path = findPath(fromId, id);
+    const transitions = pathToTransitions(path);
+    const months = totalRunway(transitions);
+    const suffix = months > 0 ? ` (${formatRunway(months)})` : '';
+    opt.textContent = ROLES[id].name + suffix;
+    toSel.appendChild(opt);
+  });
+}
+
+function onToChange() {
+  selectedTo = document.getElementById('toRole').value;
+  updatePreview();
+}
+
+function updatePreview() {
+  const preview = document.getElementById('runwayPreview');
+  const goBtn = document.getElementById('sheetGo');
+
+  if (!selectedFrom || !selectedTo) {
+    preview.innerHTML = 'Select both roles to see your path';
+    goBtn.disabled = true;
+    return;
+  }
+
+  const path = findPath(selectedFrom, selectedTo);
+  if (!path) {
+    preview.innerHTML = 'No path found between these roles';
+    goBtn.disabled = true;
+    return;
+  }
+
+  const transitions = pathToTransitions(path);
+  const months = totalRunway(transitions);
+  const steps = transitions.length;
+
+  let html = `<strong>${formatRunway(months)}</strong>&nbsp; estimated &nbsp;·&nbsp; ${steps} step${steps !== 1 ? 's' : ''}`;
+
+  // Check if any step is seat dependent
+  const seatDependent = transitions.some(t => t.runway.includes('seat'));
+  if (seatDependent) {
+    html += `<br><span style="font-size:.78rem;color:var(--text-lighter)">Some steps depend on seat availability</span>`;
+  }
+
+  preview.innerHTML = html;
+  goBtn.disabled = false;
+}
+
+/* ══════════════════════════════════════
+   LAYER 3: RENDER ROADMAP
+   ══════════════════════════════════════ */
+function showRoadmap() {
+  if (!selectedFrom || !selectedTo) return;
+
+  const path = findPath(selectedFrom, selectedTo);
+  if (!path) return;
+
+  const transitions = pathToTransitions(path);
+  const months = totalRunway(transitions);
+
+  // Update header
+  document.getElementById('roadmapTitle').textContent =
+    ROLES[selectedFrom].name + ' → ' + ROLES[selectedTo].name;
+  document.getElementById('roadmapSubtitle').textContent =
+    transitions.length + ' step' + (transitions.length !== 1 ? 's' : '') +
+    ' · ' + formatRunway(months) + ' estimated runway';
+
+  // Build timeline
+  const timeline = document.getElementById('timeline');
+  timeline.innerHTML = '';
+
+  transitions.forEach((t, i) => {
+    const step = document.createElement('div');
+    step.className = 'step';
+
+    const compCount = t.competencies.length;
+    const opsCount = t.operationalSkills.length;
+
+    step.innerHTML = `
+      <span class="step-number">${i + 1}</span>
+      <div class="step-card">
+        <div class="step-header">
+          <div class="step-from-to">${ROLES[t.from].name} → ${ROLES[t.to].name}</div>
+          <div class="step-runway">Minimum runway: <strong>${t.runway}</strong></div>
+        </div>
+
+        <div class="key-question">
+          <span class="kq-label">The key question</span>
+          ${t.keyQuestion}
+        </div>
+
+        <div class="step-meta">
+          <span>Recommended by: <strong>${t.recommendedBy}</strong></span>
+          <span>Approved by: <strong>${t.approvedBy}</strong></span>
+        </div>
+
+        <div class="expand-section" data-expand>
+          <button class="expand-trigger" onclick="toggleExpand(this)">
+            <span>Competencies <span class="badge-count">${compCount} area${compCount !== 1 ? 's' : ''}</span></span>
+            <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="expand-body">
+            <div class="expand-content">
+              ${t.competencies.map(c => renderCompetency(c)).join('')}
+            </div>
+          </div>
+        </div>
+
+        <div class="expand-section" data-expand>
+          <button class="expand-trigger" onclick="toggleExpand(this)">
+            <span>Operational Skills <span class="badge-count">${opsCount} item${opsCount !== 1 ? 's' : ''}</span></span>
+            <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="expand-body">
+            <div class="expand-content">
+              <ul class="ops-list">
+                ${t.operationalSkills.map(s => `<li>${s}</li>`).join('')}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    timeline.appendChild(step);
+  });
+
+  // Show roadmap, hide map
+  document.getElementById('map-view').style.display = 'none';
+  closeSheet();
+  document.getElementById('roadmapView').classList.add('visible');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function renderCompetency(c) {
+  const rubricId = 'rubric-' + Math.random().toString(36).substr(2, 8);
+  return `
+    <div class="comp-item">
+      <div class="comp-name">${c.name}</div>
+      <div class="comp-desc">${c.description}</div>
+      <button class="rubric-toggle" onclick="toggleRubric('${rubricId}', this)">
+        See full rubric ▸
+      </button>
+      <div class="rubric-body" id="${rubricId}">
+        <div class="rubric-grid">
+          ${c.rubric.map(r => `
+            <div class="rubric-level${r.graduation ? ' graduation' : ''}">
+              <div class="rl-label">Level ${r.level} — ${r.label}${r.graduation ? ' ← Graduation' : ''}</div>
+              ${r.text}
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+/* ══════════════════════════════════════
+   EXPAND / COLLAPSE
+   ══════════════════════════════════════ */
+function toggleExpand(btn) {
+  const section = btn.closest('.expand-section');
+  section.classList.toggle('open');
+}
+
+function toggleRubric(id, btn) {
+  const body = document.getElementById(id);
+  const isOpen = body.classList.toggle('open');
+  btn.textContent = isOpen ? 'Hide rubric ▾' : 'See full rubric ▸';
+}
+
+function backToMap() {
+  document.getElementById('roadmapView').classList.remove('visible');
+  document.getElementById('map-view').style.display = '';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ══════════════════════════════════════
+   INIT
+   ══════════════════════════════════════ */
+function init() {
+  renderMap();
+  populateFromDropdown();
+  window.addEventListener('resize', () => { drawArrows(); });
+
+  // Close sheet on Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeSheet();
+  });
+
+  // Close node actions on outside click
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.role-node')) {
+      document.querySelectorAll('.role-node.active').forEach(n => n.classList.remove('active'));
+      activeNode = null;
+    }
+  });
+}
+
+init();
+</script>
+</body>
+</html>
