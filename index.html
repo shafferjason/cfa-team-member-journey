@@ -894,6 +894,73 @@ button {
   gap: .3rem;
   margin-bottom: .25rem;
 }
+/* Platform links for podcasts/videos */
+.ri-platforms {
+  display: inline-flex;
+  gap: .4rem;
+  align-items: center;
+  margin-top: .15rem;
+}
+.ri-platforms a {
+  color: var(--red);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: .72rem;
+  padding: .15rem .45rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  transition: all .15s;
+  white-space: nowrap;
+}
+.ri-platforms a:hover {
+  background: var(--red);
+  color: #fff;
+  border-color: var(--red);
+  text-decoration: none;
+}
+
+/* AI prompt actions */
+.apc-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  margin-top: .5rem;
+}
+.apc-actions button,
+.apc-actions a {
+  display: inline-flex;
+  align-items: center;
+  gap: .25rem;
+  padding: .3rem .65rem;
+  font-size: .72rem;
+  font-weight: 600;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all .15s;
+  text-decoration: none;
+  white-space: nowrap;
+  font-family: inherit;
+}
+.apc-actions .apc-copy {
+  background: #5B7BD5;
+  color: #fff;
+  border: 1px solid #5B7BD5;
+}
+.apc-actions .apc-copy:hover { background: #4A6AC4; }
+.apc-actions .apc-copy.copied {
+  background: #2D7D46;
+  border-color: #2D7D46;
+}
+.apc-actions .apc-open {
+  background: none;
+  color: var(--charcoal-light);
+  border: 1px solid var(--border);
+}
+.apc-actions .apc-open:hover {
+  border-color: var(--charcoal-light);
+  color: var(--charcoal);
+}
+
 .ai-prompt-callout .apc-text {
   color: var(--charcoal-light);
   font-style: italic;
@@ -2767,6 +2834,8 @@ function openResourceModal(uid) {
   openModal(c.name + ' \u2014 Resources', renderInlineResources(res));
 }
 
+const _prompts = [];
+
 function renderInlineResources(res) {
   let html = '';
   if (res.resources) {
@@ -2780,12 +2849,31 @@ function renderInlineResources(res) {
       if (items.length === 0) return;
       html += `<div class="resource-section">
         <div class="resource-type-label"><span class="rt-icon">${t.icon}</span> ${t.label}</div>
-        ${items.map(r => `<div class="resource-item">
-          <span class="ri-title">${r.title}</span> — <span class="ri-author">${r.author}</span>
-          ${r.detail ? ` <span class="ri-detail">(${r.detail})</span>` : ''}
-          <div class="ri-why">${r.why}</div>
-          ${r.url ? `<a href="${r.url}" target="_blank" rel="noopener">Find it \u2192</a>` : ''}
-        </div>`).join('')}
+        ${items.map(r => {
+          let linkHtml = '';
+          if (r.url && r.type === 'podcast') {
+            const term = r.url.split('/search/')[1] || '';
+            const appleUrl = 'https://podcasts.apple.com/search?term=' + term;
+            linkHtml = `<div class="ri-platforms">
+              <a href="${r.url}" target="_blank" rel="noopener">Spotify</a>
+              <a href="${appleUrl}" target="_blank" rel="noopener">Apple Podcasts</a>
+            </div>`;
+          } else if (r.url && r.type === 'video') {
+            linkHtml = `<div class="ri-platforms">
+              <a href="${r.url}" target="_blank" rel="noopener">YouTube \u2192</a>
+            </div>`;
+          } else if (r.url) {
+            linkHtml = `<div class="ri-platforms">
+              <a href="${r.url}" target="_blank" rel="noopener">Find it \u2192</a>
+            </div>`;
+          }
+          return `<div class="resource-item">
+            <span class="ri-title">${r.title}</span> \u2014 <span class="ri-author">${r.author}</span>
+            ${r.detail ? ` <span class="ri-detail">(${r.detail})</span>` : ''}
+            <div class="ri-why">${r.why}</div>
+            ${linkHtml}
+          </div>`;
+        }).join('')}
       </div>`;
     });
   }
@@ -2796,12 +2884,30 @@ function renderInlineResources(res) {
     </div>`;
   }
   if (res.aiPrompt) {
+    const idx = _prompts.length;
+    _prompts.push(res.aiPrompt);
     html += `<div class="ai-prompt-callout">
       <div class="apc-label">\uD83E\uDD16 AI Reflection Prompt</div>
       <div class="apc-text">"${res.aiPrompt}"</div>
+      <div class="apc-actions">
+        <button class="apc-copy" onclick="copyPrompt(this, ${idx})">Copy prompt</button>
+        <a class="apc-open" href="https://claude.ai/new" target="_blank" rel="noopener">Open Claude</a>
+        <a class="apc-open" href="https://chatgpt.com/" target="_blank" rel="noopener">Open ChatGPT</a>
+      </div>
     </div>`;
   }
   return html;
+}
+
+function copyPrompt(btn, idx) {
+  navigator.clipboard.writeText(_prompts[idx]).then(() => {
+    btn.classList.add('copied');
+    btn.textContent = 'Copied!';
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.textContent = 'Copy prompt';
+    }, 2000);
+  });
 }
 
 /* ══════════════════════════════════════
