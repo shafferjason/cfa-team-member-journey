@@ -76,11 +76,11 @@ button {
 }
 
 /* ══════════════════════════════════════
-   LAYER 1 — CAREER MAP
+   SCREEN 1 — WELCOME + ROLE SELECTION
    ══════════════════════════════════════ */
 #app { position: relative; }
 
-.map-header {
+.welcome-header {
   background: linear-gradient(165deg, var(--charcoal) 0%, #1a1a1a 40%, var(--red-dark) 100%);
   color: #fff;
   padding: clamp(2.5rem, 6vw, 4rem) clamp(1rem, 4vw, 2rem) 1.5rem;
@@ -88,99 +88,110 @@ button {
   position: relative;
   overflow: hidden;
 }
-.map-header::before {
+.welcome-header::before {
   content: '';
   position: absolute; top: -50%; right: -20%; width: 70%; height: 200%;
   background: radial-gradient(ellipse, rgba(200,16,46,.15) 0%, transparent 70%);
   pointer-events: none;
 }
-.map-header h1 { color: #fff; margin-bottom: .5rem; }
-.map-header p { color: rgba(255,255,255,.7); font-size: 1.05rem; max-width: 520px; margin: 0 auto; }
+.welcome-header h1 { color: #fff; margin-bottom: .5rem; }
+.welcome-header p { color: rgba(255,255,255,.7); font-size: 1.05rem; max-width: 520px; margin: 0 auto; }
 
-/* Map container */
-.career-map {
-  max-width: 960px;
+.welcome-body {
+  max-width: 800px;
   margin: 0 auto;
-  padding: 2rem clamp(1rem, 3vw, 2rem) 6rem;
-  position: relative;
+  padding: 2rem clamp(1rem, 3vw, 2rem) 3rem;
 }
 
-/* SVG arrow layer */
-.map-svg {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  pointer-events: none;
-  z-index: 0;
+.welcome-intro {
+  text-align: center;
+  margin-bottom: 2rem;
 }
-.map-svg line, .map-svg path {
-  stroke-width: 2;
-  fill: none;
-  opacity: .35;
+.welcome-intro p {
+  color: var(--text-light);
+  font-size: .95rem;
+  max-width: 560px;
+  margin: 0 auto .75rem;
+  line-height: 1.6;
 }
 
-/* Grid layout for nodes */
-.map-grid {
+.role-prompt {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 600;
+  font-size: clamp(1.15rem, 2.5vw, 1.4rem);
+  color: var(--charcoal);
+  text-align: center;
+  margin-bottom: 1.25rem;
+}
+
+/* Role selection cards grid */
+.role-cards {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  grid-template-rows: auto;
-  gap: 1.25rem;
-  position: relative;
-  z-index: 1;
+  grid-template-columns: 1fr;
+  gap: .75rem;
+  margin-bottom: 2.5rem;
+}
+@media (min-width: 600px) {
+  .role-cards { grid-template-columns: 1fr 1fr; }
 }
 
-/* Role node card */
-.role-node {
+.role-card {
   background: var(--warm-white);
   border: 2px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: 1rem .875rem;
-  text-align: center;
+  padding: 1.1rem 1.25rem;
   cursor: pointer;
   transition: all var(--dur) var(--ease);
-  position: relative;
-  min-height: 100px;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-start;
+  gap: .875rem;
   -webkit-tap-highlight-color: transparent;
+  min-height: 80px;
+  text-align: left;
 }
-.role-node:hover, .role-node:focus-visible {
+.role-card:hover, .role-card:focus-visible {
   border-color: var(--red);
   box-shadow: var(--shadow-md), 0 0 0 3px rgba(200,16,46,.1);
   transform: translateY(-2px);
 }
-.role-node.active {
-  border-color: var(--red);
-  box-shadow: 0 0 0 3px rgba(200,16,46,.18);
-  z-index: 10;
+.role-card:active {
+  transform: translateY(0);
 }
-
-.role-node .rank-badge {
+.role-card .card-badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 28px; height: 28px;
+  width: 36px; height: 36px;
+  min-width: 36px;
   border-radius: 50%;
-  font-size: .7rem;
+  font-size: .78rem;
   font-weight: 700;
-  margin-bottom: .4rem;
   color: #fff;
+  margin-top: .15rem;
 }
-.role-node .role-name {
+.role-card .card-body {
+  flex: 1;
+  min-width: 0;
+}
+.role-card .card-name {
   font-family: 'Playfair Display', Georgia, serif;
   font-weight: 600;
-  font-size: .92rem;
+  font-size: 1.05rem;
   color: var(--charcoal);
-  line-height: 1.2;
+  line-height: 1.25;
   margin-bottom: .25rem;
 }
-.role-node .role-tagline {
-  font-size: .72rem;
+.role-card .card-desc {
+  font-size: .85rem;
   color: var(--text-light);
-  line-height: 1.3;
+  line-height: 1.5;
 }
+
+/* Path-specific left border */
+.role-card[data-path="leadership"] { border-left: 4px solid var(--path-leadership); }
+.role-card[data-path="training"] { border-left: 4px solid var(--path-training); }
+.role-card[data-path="specialist"] { border-left: 4px solid var(--path-specialist); }
+.role-card[data-path="core"] { border-left: 4px solid var(--path-core); }
 
 /* Path-specific badge colors */
 .badge-leadership { background: var(--path-leadership); }
@@ -188,244 +199,304 @@ button {
 .badge-specialist { background: var(--path-specialist); }
 .badge-core { background: var(--path-core); }
 
-/* Grid placement */
-.node-tm           { grid-column: 3; grid-row: 1; }
-.node-trainer      { grid-column: 2; grid-row: 2; }
-.node-specialist   { grid-column: 4; grid-row: 2; }
-.node-core         { grid-column: 5; grid-row: 2; }
-.node-tl           { grid-column: 1; grid-row: 3; }
-.node-spec-trainer { grid-column: 3; grid-row: 3; }
-.node-ad           { grid-column: 1; grid-row: 4; }
-.node-ops-dir      { grid-column: 1; grid-row: 5; }
-.node-spc-dir      { grid-column: 2; grid-row: 5; }
-
-/* Node tooltip on click */
-.node-actions {
-  position: absolute;
-  bottom: -52px; left: 50%;
-  transform: translateX(-50%);
+/* Big picture collapsible */
+.big-picture-section {
+  border-top: 1px solid var(--border);
+  padding-top: 1rem;
+}
+.big-picture-toggle {
   display: flex;
-  gap: .4rem;
-  z-index: 10;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity .15s;
-}
-.role-node.active .node-actions {
-  opacity: 1;
-  pointer-events: auto;
-}
-.node-actions button {
-  padding: .35rem .65rem;
-  border-radius: 20px;
-  font-size: .72rem;
-  font-weight: 600;
-  white-space: nowrap;
-  transition: all .15s;
-}
-.btn-here {
-  background: var(--charcoal);
-  color: #fff;
-}
-.btn-here:hover { background: #000; }
-.btn-want {
-  background: var(--red);
-  color: #fff;
-}
-.btn-want:hover { background: var(--red-dark); }
-
-/* Plan My Path CTA */
-.plan-cta {
-  text-align: center;
-  padding: 1.5rem 1rem 0;
-}
-.plan-cta button {
-  background: var(--red);
-  color: #fff;
-  font-size: 1.05rem;
-  font-weight: 600;
-  padding: .85rem 2.5rem;
-  border-radius: 50px;
-  transition: all var(--dur) var(--ease);
-  box-shadow: var(--shadow-md);
-}
-.plan-cta button:hover { background: var(--red-dark); transform: translateY(-1px); box-shadow: var(--shadow-lg); }
-
-/* Legend */
-.map-legend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: .75rem 1.5rem;
-  justify-content: center;
-  padding: 1.25rem 1rem 0;
-  font-size: .78rem;
-  color: var(--text-light);
-}
-.map-legend span {
-  display: inline-flex;
   align-items: center;
-  gap: .35rem;
+  justify-content: center;
+  gap: .4rem;
+  width: 100%;
+  padding: .6rem;
+  font-size: .9rem;
+  font-weight: 600;
+  color: var(--text-light);
+  transition: color .15s;
+  -webkit-tap-highlight-color: transparent;
 }
-.map-legend span::before {
+.big-picture-toggle:hover { color: var(--red); }
+.big-picture-toggle .chevron-bp {
+  width: 16px; height: 16px;
+  transition: transform .2s var(--ease);
+}
+.big-picture-section.open .big-picture-toggle .chevron-bp {
+  transform: rotate(180deg);
+}
+.big-picture-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .4s var(--ease);
+}
+.big-picture-section.open .big-picture-body {
+  max-height: 600px;
+}
+
+/* Tree view */
+.path-tree {
+  padding: 1rem 0 .5rem;
+  font-size: .85rem;
+  color: var(--text);
+}
+.tree-branch {
+  margin-bottom: .75rem;
+}
+.tree-label {
+  font-weight: 600;
+  font-size: .78rem;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  margin-bottom: .35rem;
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+}
+.tree-label::before {
   content: '';
   display: block;
   width: 10px; height: 10px;
   border-radius: 50%;
 }
-.legend-leadership::before { background: var(--path-leadership); }
-.legend-training::before { background: var(--path-training); }
-.legend-specialist::before { background: var(--path-specialist); }
-.legend-core::before { background: var(--path-core); }
+.tree-leadership .tree-label::before { background: var(--path-leadership); }
+.tree-training .tree-label::before { background: var(--path-training); }
+.tree-specialist .tree-label::before { background: var(--path-specialist); }
+.tree-core .tree-label::before { background: var(--path-core); }
+
+.tree-path {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .25rem;
+  padding-left: 1.4rem;
+  font-size: .84rem;
+  color: var(--text-light);
+  line-height: 1.8;
+}
+.tree-path .tree-node {
+  background: var(--cream-dark);
+  padding: .15rem .55rem;
+  border-radius: 4px;
+  font-weight: 500;
+  color: var(--charcoal);
+  white-space: nowrap;
+}
+.tree-path .tree-arrow {
+  color: var(--text-lighter);
+  font-size: .75rem;
+}
 
 /* ══════════════════════════════════════
-   LAYER 2 — BOTTOM SHEET / SELECTOR
+   SCREEN 2 — YOUR OPTIONS
    ══════════════════════════════════════ */
-.sheet-backdrop {
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,.35);
-  z-index: 100;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity .3s;
+.options-view {
+  display: none;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 clamp(1rem, 3vw, 2rem) 4rem;
 }
-.sheet-backdrop.open {
-  opacity: 1;
-  pointer-events: auto;
-}
+.options-view.visible { display: block; }
 
-.bottom-sheet {
-  position: fixed;
-  bottom: 0; left: 0; right: 0;
-  background: var(--warm-white);
-  border-radius: 20px 20px 0 0;
-  z-index: 101;
-  transform: translateY(100%);
-  transition: transform .35s var(--ease);
-  max-height: 85dvh;
-  overflow-y: auto;
-  padding: 0 clamp(1rem, 4vw, 2rem) calc(1.5rem + env(safe-area-inset-bottom, 0));
-  box-shadow: 0 -8px 30px rgba(0,0,0,.15);
+.options-header {
+  background: linear-gradient(165deg, var(--charcoal) 0%, #1a1a1a 40%, var(--red-dark) 100%);
+  color: #fff;
+  padding: clamp(2rem, 5vw, 3rem) clamp(1rem, 4vw, 2rem) 1.5rem;
+  position: relative;
+  overflow: hidden;
 }
-.bottom-sheet.open {
-  transform: translateY(0);
-}
-
-.sheet-handle {
-  display: flex;
-  justify-content: center;
-  padding: .75rem 0 .5rem;
-  position: sticky;
-  top: 0;
-  background: var(--warm-white);
-  z-index: 2;
-}
-.sheet-handle::before {
+.options-header::before {
   content: '';
-  width: 36px; height: 4px;
-  background: var(--border);
-  border-radius: 2px;
+  position: absolute; top: -50%; right: -20%; width: 70%; height: 200%;
+  background: radial-gradient(ellipse, rgba(200,16,46,.15) 0%, transparent 70%);
+  pointer-events: none;
 }
 
-.sheet-title {
-  font-size: 1.3rem;
-  text-align: center;
-  margin-bottom: 1.25rem;
+.options-back {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  padding: .5rem .75rem;
+  font-size: .88rem;
+  font-weight: 600;
+  color: rgba(255,255,255,.7);
+  border-radius: var(--radius);
+  transition: color .15s;
+  margin-bottom: .75rem;
+  position: relative;
+  z-index: 1;
+}
+.options-back:hover { color: #fff; }
+.options-back svg { width: 16px; height: 16px; }
+
+.options-header-content {
+  position: relative;
+  z-index: 1;
+}
+.options-header h2 { color: #fff; margin-bottom: .35rem; }
+.options-header h2 strong { color: #fff; }
+.options-header .options-subtitle {
+  color: rgba(255,255,255,.7);
+  font-size: .95rem;
 }
 
-.selector-row {
+.options-body {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem clamp(1rem, 3vw, 2rem) 4rem;
+}
+
+.section-label {
+  font-size: .78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--text-lighter);
+  margin-bottom: .75rem;
+}
+
+/* Next step cards */
+.option-cards {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  margin-bottom: 1.25rem;
-}
-@media (min-width: 600px) {
-  .selector-row { flex-direction: row; gap: 1rem; }
-  .selector-group { flex: 1; }
-}
-.selector-group label {
-  display: block;
-  font-size: .8rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: .05em;
-  color: var(--text-light);
-  margin-bottom: .35rem;
-}
-.selector-group select {
-  width: 100%;
-  padding: .7rem 1rem;
-  font-family: inherit;
-  font-size: 1rem;
-  border: 2px solid var(--border);
-  border-radius: var(--radius);
-  background: #fff;
-  color: var(--charcoal);
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%237A7168' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 1rem center;
-  cursor: pointer;
-  transition: border-color .15s;
-}
-.selector-group select:focus {
-  outline: none;
-  border-color: var(--red);
+  margin-bottom: 2.5rem;
 }
 
-.runway-preview {
-  text-align: center;
-  padding: .75rem;
-  background: var(--cream);
-  border-radius: var(--radius);
-  margin-bottom: 1rem;
-  font-size: .9rem;
-  color: var(--text-light);
-  min-height: 44px;
+.option-card {
+  background: var(--warm-white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--dur) var(--ease);
+}
+.option-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.option-card-header {
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: .75rem;
+  margin-bottom: .75rem;
+  flex-wrap: wrap;
 }
-.runway-preview strong {
-  color: var(--red);
-  font-size: 1.1rem;
+.option-card-header .card-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px; height: 32px;
+  min-width: 32px;
+  border-radius: 50%;
+  font-size: .72rem;
+  font-weight: 700;
+  color: #fff;
+}
+.option-card-header .option-role-name {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 600;
+  font-size: 1.15rem;
+  color: var(--charcoal);
+}
+.option-card-header .runway-badge {
+  margin-left: auto;
+  background: var(--cream-dark);
+  padding: .2rem .65rem;
+  border-radius: 20px;
+  font-size: .78rem;
+  font-weight: 600;
+  color: var(--text-light);
+  white-space: nowrap;
 }
 
-.sheet-go {
-  width: 100%;
-  padding: .85rem;
-  font-size: 1.05rem;
-  font-weight: 600;
+.option-card-desc {
+  font-size: .92rem;
+  color: var(--text);
+  line-height: 1.6;
+  margin-bottom: .75rem;
+}
+
+.option-further {
+  font-size: .82rem;
+  color: var(--text-lighter);
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.option-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  padding: .6rem 1.25rem;
   background: var(--red);
   color: #fff;
+  font-size: .9rem;
+  font-weight: 600;
   border-radius: var(--radius);
-  transition: background .15s;
-  min-height: 48px;
+  transition: background .15s, transform .1s;
 }
-.sheet-go:hover { background: var(--red-dark); }
-.sheet-go:disabled {
-  background: var(--border);
-  color: var(--text-lighter);
-  cursor: not-allowed;
+.option-cta:hover { background: var(--red-dark); transform: translateY(-1px); }
+.option-cta:active { transform: translateY(0); }
+
+/* Further destinations */
+.further-cards {
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+  margin-bottom: 2rem;
 }
 
-/* Desktop: sheet becomes an inline card */
-@media (min-width: 768px) {
-  .sheet-backdrop { display: none; }
-  .bottom-sheet {
-    position: relative;
-    transform: none;
-    max-width: 640px;
-    margin: -1.5rem auto 0;
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-lg);
-    display: none;
-    padding-bottom: 1.5rem;
-  }
-  .bottom-sheet.open {
-    display: block;
-    transform: none;
-  }
-  .sheet-handle { display: none; }
+.further-card {
+  background: var(--warm-white);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.further-card-info {
+  flex: 1;
+  min-width: 0;
+}
+.further-card-name {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--charcoal);
+  margin-bottom: .15rem;
+}
+.further-card-meta {
+  font-size: .82rem;
+  color: var(--text-lighter);
+}
+.further-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  padding: .5rem 1rem;
+  font-size: .82rem;
+  font-weight: 600;
+  color: var(--red);
+  border: 1px solid var(--red);
+  border-radius: var(--radius);
+  transition: all .15s;
+  white-space: nowrap;
+}
+.further-cta:hover {
+  background: var(--red);
+  color: #fff;
+}
+
+/* Placeholder note */
+.placeholder-note {
+  font-size: .85rem;
+  color: var(--text-lighter);
+  font-style: italic;
+  padding: .5rem 0;
 }
 
 /* ══════════════════════════════════════
@@ -708,62 +779,6 @@ button {
 }
 
 /* ══════════════════════════════════════
-   MOBILE ADJUSTMENTS
-   ══════════════════════════════════════ */
-@media (max-width: 640px) {
-  .map-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: .75rem;
-  }
-  .node-tm           { grid-column: 2; grid-row: 1; }
-  .node-trainer      { grid-column: 1; grid-row: 2; }
-  .node-specialist   { grid-column: 3; grid-row: 2; }
-  .node-core         { grid-column: 2; grid-row: 2; }
-  .node-tl           { grid-column: 1; grid-row: 3; }
-  .node-spec-trainer { grid-column: 3; grid-row: 3; }
-  .node-ad           { grid-column: 1; grid-row: 4; }
-  .node-ops-dir      { grid-column: 1; grid-row: 5; }
-  .node-spc-dir      { grid-column: 2; grid-row: 5; }
-
-  .role-node {
-    padding: .75rem .5rem;
-    min-height: 80px;
-  }
-  .role-node .role-name { font-size: .8rem; }
-  .role-node .role-tagline { font-size: .65rem; }
-  .role-node .rank-badge { width: 24px; height: 24px; font-size: .62rem; }
-
-  .node-actions {
-    bottom: -46px;
-  }
-  .node-actions button { font-size: .65rem; padding: .3rem .5rem; }
-
-  .map-svg { display: none; }
-}
-
-@media (max-width: 380px) {
-  .map-grid {
-    grid-template-columns: 1fr;
-    gap: .6rem;
-  }
-  .node-tm, .node-trainer, .node-specialist, .node-core,
-  .node-tl, .node-spec-trainer, .node-ad, .node-ops-dir, .node-spc-dir {
-    grid-column: 1;
-    grid-row: auto;
-  }
-  .role-node {
-    flex-direction: row;
-    justify-content: flex-start;
-    gap: .75rem;
-    text-align: left;
-    min-height: 56px;
-    padding: .6rem 1rem;
-  }
-  .role-node .rank-badge { margin-bottom: 0; }
-  .node-actions { display: none; }
-}
-
-/* ══════════════════════════════════════
    UTILITY
    ══════════════════════════════════════ */
 .sr-only {
@@ -776,81 +791,62 @@ button {
 <body>
 
 <div id="app">
-  <!-- LAYER 1: Career Map -->
-  <div id="map-view">
-    <header class="map-header">
-      <h1>Your Career Pathways</h1>
-      <p>See where you can go — and how to get there. Tap any role to start.</p>
+  <!-- SCREEN 1: Welcome + Role Selection -->
+  <div id="welcome-view">
+    <header class="welcome-header">
+      <h1>Your Career at CFA Wall Street</h1>
+      <p>Find your path and see what it takes to get there.</p>
     </header>
 
-    <div class="career-map">
-      <svg class="map-svg" id="mapSvg" aria-hidden="true">
-        <defs>
-          <marker id="arrow-red" viewBox="0 0 10 8" refX="9" refY="4" markerWidth="8" markerHeight="6" orient="auto">
-            <path d="M0,0 L10,4 L0,8 Z" fill="var(--path-leadership)" opacity=".5"/>
-          </marker>
-          <marker id="arrow-green" viewBox="0 0 10 8" refX="9" refY="4" markerWidth="8" markerHeight="6" orient="auto">
-            <path d="M0,0 L10,4 L0,8 Z" fill="var(--path-training)" opacity=".5"/>
-          </marker>
-          <marker id="arrow-blue" viewBox="0 0 10 8" refX="9" refY="4" markerWidth="8" markerHeight="6" orient="auto">
-            <path d="M0,0 L10,4 L0,8 Z" fill="var(--path-specialist)" opacity=".5"/>
-          </marker>
-          <marker id="arrow-gold" viewBox="0 0 10 8" refX="9" refY="4" markerWidth="8" markerHeight="6" orient="auto">
-            <path d="M0,0 L10,4 L0,8 Z" fill="var(--path-core)" opacity=".5"/>
-          </marker>
-        </defs>
-      </svg>
-
-      <div class="map-grid" id="mapGrid">
-        <!-- Nodes rendered by JS -->
+    <div class="welcome-body">
+      <div class="welcome-intro">
+        <p>This framework shows every role you can grow into and what it takes to get there — the competencies, operational skills, and key questions that define each transition.</p>
+        <p>Start by selecting your current role. We'll show you where you can go and exactly how to get there.</p>
       </div>
 
-      <div class="map-legend">
-        <span class="legend-leadership">Leadership</span>
-        <span class="legend-training">Training</span>
-        <span class="legend-specialist">Specialist</span>
-        <span class="legend-core">Core Contributor</span>
+      <div class="role-prompt">Where are you right now?</div>
+
+      <div class="role-cards" id="roleCards">
+        <!-- Rendered by JS -->
       </div>
 
-      <div class="plan-cta">
-        <button onclick="openSheet()" aria-label="Plan My Path">Plan My Path</button>
+      <div class="big-picture-section" id="bigPicture">
+        <button class="big-picture-toggle" onclick="toggleBigPicture()">
+          See the big picture
+          <svg class="chevron-bp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="big-picture-body">
+          <div class="path-tree" id="pathTree">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- LAYER 2: Bottom Sheet Selector -->
-  <div class="sheet-backdrop" id="sheetBackdrop" onclick="closeSheet()"></div>
-  <div class="bottom-sheet" id="bottomSheet" role="dialog" aria-label="Path Selector">
-    <div class="sheet-handle"></div>
-    <h2 class="sheet-title">Plan My Path</h2>
-
-    <div class="selector-row">
-      <div class="selector-group">
-        <label for="fromRole">I am currently a…</label>
-        <select id="fromRole" onchange="onFromChange()">
-          <option value="">Select your role</option>
-        </select>
-      </div>
-      <div class="selector-group">
-        <label for="toRole">I want to become a…</label>
-        <select id="toRole" onchange="onToChange()" disabled>
-          <option value="">Select a goal</option>
-        </select>
+  <!-- SCREEN 2: Your Options -->
+  <div id="options-view-wrapper" style="display:none;">
+    <div class="options-header">
+      <button class="options-back" onclick="showWelcome()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        Change my role
+      </button>
+      <div class="options-header-content">
+        <h2 id="optionsTitle"></h2>
+        <p class="options-subtitle" id="optionsSubtitle">Here's where you can go from here</p>
       </div>
     </div>
 
-    <div class="runway-preview" id="runwayPreview">
-      Select both roles to see your path
+    <div class="options-body" id="optionsBody">
+      <!-- Rendered by JS -->
     </div>
-
-    <button class="sheet-go" id="sheetGo" disabled onclick="showRoadmap()">Show My Roadmap</button>
   </div>
 
-  <!-- LAYER 3: Roadmap Stepper -->
+  <!-- SCREEN 3: Roadmap Stepper -->
   <div class="roadmap-view" id="roadmapView">
-    <button class="roadmap-back" onclick="backToMap()">
+    <button class="roadmap-back" id="roadmapBackBtn" onclick="backToOptions()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-      Back to Map
+      Back to my options
     </button>
 
     <h2 class="roadmap-title" id="roadmapTitle"></h2>
@@ -870,57 +866,85 @@ const ROLES = {
     id: 'tm', name: 'Team Member', shortName: 'TM',
     rank: 1, badgeClass: 'badge-leadership',
     tagline: 'Learn the heart',
-    gridClass: 'node-tm'
+    path: 'leadership',
+    description: "You're learning the ropes — working shifts, getting certified on stations, and building the foundation."
   },
   trainer: {
     id: 'trainer', name: 'Certified Trainer', shortName: 'CT',
     rank: 2, badgeClass: 'badge-leadership',
     tagline: 'Lead through connection',
-    gridClass: 'node-trainer'
+    path: 'leadership',
+    description: "You train new team members — teaching them not just how, but why we do things the way we do."
   },
   tl: {
     id: 'tl', name: 'Team Leader', shortName: 'TL',
     rank: 3, badgeClass: 'badge-leadership',
     tagline: 'Lead through character',
-    gridClass: 'node-tl'
+    path: 'leadership',
+    description: "You lead shifts. You set the tone, hold the standard, coach in the moment, and protect the guest experience."
   },
   ad: {
     id: 'ad', name: 'Asst Director', shortName: 'AD',
     rank: 4, badgeClass: 'badge-leadership',
     tagline: 'Lead through accountability',
-    gridClass: 'node-ad'
+    path: 'leadership',
+    description: "You run the systems behind the scenes — scheduling, staffing, food cost — and develop the leaders on your team."
   },
   opsDir: {
     id: 'opsDir', name: 'Ops Director', shortName: 'OD',
     rank: 5, badgeClass: 'badge-leadership',
     tagline: 'Lead through direction',
-    gridClass: 'node-ops-dir'
+    path: 'leadership',
+    description: "You lead restaurant operations — setting direction, building systems, and leading a team of leaders."
   },
   spcDir: {
     id: 'spcDir', name: 'Specialty Director', shortName: 'SD',
     rank: 5, badgeClass: 'badge-leadership',
     tagline: 'Lead through direction',
-    gridClass: 'node-spc-dir'
+    path: 'leadership',
+    description: "You lead a specialty function like Talent or Catering, setting direction across teams."
   },
   specTrainer: {
     id: 'specTrainer', name: 'Specialized Trainer', shortName: 'ST',
     rank: 3, badgeClass: 'badge-training',
     tagline: 'Lead through development',
-    gridClass: 'node-spec-trainer'
+    path: 'training',
+    description: "You develop other trainers, design curriculum, and hold the standard for how we train."
   },
   specialist: {
     id: 'specialist', name: 'Station Specialist', shortName: 'SS',
     rank: 2, badgeClass: 'badge-specialist',
     tagline: 'Own your zone',
-    gridClass: 'node-specialist'
+    path: 'specialist',
+    description: "You're the go-to expert in your zone. You own the standard, track the metrics, and build others' skills."
   },
   core: {
     id: 'core', name: 'Core Contributor', shortName: 'CC',
     rank: 1, badgeClass: 'badge-core',
     tagline: 'Valued & reliable',
-    gridClass: 'node-core'
+    path: 'core',
+    description: "You're a valued, reliable team member. You show up, do great work, and grow at your own pace."
+  },
+  operator: {
+    id: 'operator', name: 'Operator', shortName: 'OP',
+    rank: 6, badgeClass: 'badge-leadership',
+    tagline: 'Lead through ownership',
+    path: 'leadership',
+    description: "You own and operate a Chick-fil-A restaurant.",
+    placeholder: true
+  },
+  corporate: {
+    id: 'corporate', name: 'Corporate / LDP', shortName: 'LDP',
+    rank: 6, badgeClass: 'badge-leadership',
+    tagline: 'Lead beyond the restaurant',
+    path: 'leadership',
+    description: "You lead at the corporate level through the CFA Leadership Development Program.",
+    placeholder: true
   }
 };
+
+// Display order for role selection (Screen 1) — excludes placeholder roles
+const SELECTABLE_ROLES = ['tm', 'trainer', 'tl', 'ad', 'specialist', 'specTrainer', 'opsDir', 'spcDir', 'core'];
 
 const TRANSITIONS = {
   'tm->trainer': {
@@ -1367,7 +1391,126 @@ const TRANSITIONS = {
       'Optional: Deeper mastery in existing stations',
       'Recognition through badge system (Steadfast Contributor, Heart of Hospitality, etc.)'
     ]
+  },
+
+  'core->trainer': {
+    from: 'core', to: 'trainer',
+    runway: '6 months',
+    runwayMonths: 6,
+    keyQuestion: 'Are you ready to re-enter the growth path and invest in developing others?',
+    recommendedBy: 'Trainer or Team Leader',
+    approvedBy: 'Director',
+    competencies: [
+      {
+        name: 'Caring',
+        description: 'The hospitality foundation — treat every guest and teammate with genuine warmth and dignity.',
+        rubric: [
+          { level: 1, label: 'Not Yet', text: 'Goes through the motions. Greeting feels scripted. Doesn\'t notice teammates or guests who need attention.' },
+          { level: 2, label: 'Emerging', text: 'Shows genuine care when things are calm, but loses it during rush or when stressed. Inconsistent.' },
+          { level: 3, label: 'Consistent', text: 'Maintains warmth and awareness even under pressure. Teammates and guests feel it reliably.', graduation: true },
+          { level: 4, label: 'Models', text: 'Other team members notice and comment on it. New hires naturally look to this person for how to treat people.' }
+        ]
+      },
+      {
+        name: 'Coachability',
+        description: 'The prerequisite for all growth — receive feedback openly, apply it visibly, and seek it proactively.',
+        rubric: [
+          { level: 1, label: 'Not Yet', text: 'Gets defensive, shuts down, or agrees in the moment but nothing changes.' },
+          { level: 2, label: 'Emerging', text: 'Accepts feedback gracefully but application is spotty. Needs reminding.' },
+          { level: 3, label: 'Consistent', text: 'Actively seeks feedback. Applies it. You can see growth week over week.', graduation: true },
+          { level: 4, label: 'Models', text: 'Asks for feedback regularly. Other team members notice their growth and are inspired by it.' }
+        ]
+      }
+    ],
+    operationalSkills: [
+      'Complete orientation (handbook, policies, food safety, culture)',
+      '3 station certifications on their side (FOH or BOH)',
+      'Orientation track complete'
+    ]
+  },
+
+  'specTrainer->tl': {
+    from: 'specTrainer', to: 'tl',
+    runway: '12 months',
+    runwayMonths: 12,
+    keyQuestion: 'Can this Specialized Trainer bridge into shift leadership? Do they have the Interpersonal skills and Composure to lead a whole team, not just the training program?',
+    recommendedBy: 'Director',
+    approvedBy: 'Operator',
+    competencies: [
+      {
+        name: 'Interpersonal',
+        description: 'Extend beyond training — own your part in conflict across the team, listen openly, seek to understand.',
+        rubric: [
+          { level: 1, label: 'Not Yet', text: 'Strong in training but blames others when broader team issues arise. Gets defensive when challenged outside training context.' },
+          { level: 2, label: 'Emerging', text: 'Owns their part in training-related conflicts but struggles with broader team dynamics.' },
+          { level: 3, label: 'Consistent', text: 'Owns mistakes openly across all areas. Team members feel heard when they bring any issue to this person.', graduation: true },
+          { level: 4, label: 'Models', text: 'Conflict gets resolved around this person. Others come to them for perspective on any team issue, not just training.' }
+        ]
+      },
+      {
+        name: 'Composure',
+        description: 'Stay calm under pressure across the whole shift, not just in training. Your energy sets the tone for everyone.',
+        rubric: [
+          { level: 1, label: 'Not Yet', text: 'Calm in training contexts but anxious or overwhelmed when managing the broader shift.' },
+          { level: 2, label: 'Emerging', text: 'Holds composure in routine situations but loses it when multiple areas need attention simultaneously.' },
+          { level: 3, label: 'Consistent', text: 'Calm is the default across the whole shift. Team members feel steadied by this person\'s presence.', graduation: true },
+          { level: 4, label: 'Models', text: 'The entire shift runs differently when this person leads. Their composure is contagious.' }
+        ]
+      }
+    ],
+    operationalSkills: [
+      'Certified on most/all stations on their side',
+      'Basic cross-training on the other side',
+      'Shift management demonstrated',
+      'Cash/register management demonstrated',
+      'Guest recovery demonstrated',
+      'Food safety oversight demonstrated',
+      'Labor awareness demonstrated'
+    ]
+  },
+
+  'opsDir->operator': {
+    from: 'opsDir', to: 'operator',
+    runway: 'Varies',
+    runwayMonths: 0,
+    keyQuestion: 'Are you called to own and operate your own Chick-fil-A restaurant?',
+    recommendedBy: 'Operator',
+    approvedBy: 'CFA Selection Process',
+    competencies: [],
+    operationalSkills: [],
+    placeholder: true,
+    placeholderNote: 'Talk to your Operator about the path to becoming an Operator. Details about the CFA selection process coming soon.'
+  },
+
+  'spcDir->corporate': {
+    from: 'spcDir', to: 'corporate',
+    runway: 'Varies',
+    runwayMonths: 0,
+    keyQuestion: 'Are you called to lead at the corporate level?',
+    recommendedBy: 'Operator',
+    approvedBy: 'CFA Corporate',
+    competencies: [],
+    operationalSkills: [],
+    placeholder: true,
+    placeholderNote: 'Talk to your Operator about the CFA Leadership Development Program. Details coming soon.'
   }
+};
+
+// Option card descriptions — what each transition means for *you*
+const OPTION_DESCS = {
+  'tm->trainer': "Learn to train and develop others. You'll build on your caring and coachability to help new team members succeed.",
+  'tm->specialist': "Go deep in one area. Become the expert everyone looks to in your zone.",
+  'tm->core': "Stay in your current role and grow at your own pace. No pressure — you're valued for your reliability and care.",
+  'trainer->tl': "Step into shift leadership. You'll lead the team, hold the standard, and coach in real time.",
+  'trainer->specTrainer': "Go deeper into training. Develop other trainers, design curriculum, and be the standard-bearer for how we train.",
+  'tl->ad': "Take on strategic responsibility — systems, schedules, staffing, and developing the leaders below you.",
+  'ad->opsDir': "Lead restaurant operations. Set direction, build systems, and lead a team of leaders. (Seat dependent)",
+  'ad->spcDir': "Lead a specialty function like Talent or Catering. Set direction across teams. (Seat dependent)",
+  'specialist->tl': "Bridge into full shift leadership. You already have zone expertise — now extend it to the whole team.",
+  'specTrainer->tl': "Bridge into leadership. Your training expertise gives you credibility — now build the leadership competencies.",
+  'core->trainer': "Ready to start growing? The Trainer path is your re-entry point into the development journey.",
+  'opsDir->operator': "Talk to your Operator about the path to becoming an Operator. Details coming soon.",
+  'spcDir->corporate': "Talk to your Operator about the CFA Leadership Development Program. Details coming soon."
 };
 
 // Adjacency list for BFS
@@ -1376,11 +1519,13 @@ const GRAPH = {
   trainer:     ['tl', 'specTrainer'],
   tl:          ['ad'],
   ad:          ['opsDir', 'spcDir'],
-  opsDir:      [],
-  spcDir:      [],
-  specTrainer: [],
+  opsDir:      ['operator'],
+  spcDir:      ['corporate'],
+  specTrainer: ['tl'],
   specialist:  ['tl'],
-  core:        []
+  core:        ['trainer'],
+  operator:    [],
+  corporate:   []
 };
 
 /* ══════════════════════════════════════
@@ -1442,231 +1587,251 @@ function formatRunway(months) {
 }
 
 /* ══════════════════════════════════════
-   RENDER MAP
+   HELPER — FURTHER CHAIN TEXT
    ══════════════════════════════════════ */
-let activeNode = null;
-
-function renderMap() {
-  const grid = document.getElementById('mapGrid');
-  grid.innerHTML = '';
-
-  for (const role of Object.values(ROLES)) {
-    const div = document.createElement('div');
-    div.className = `role-node ${role.gridClass}`;
-    div.setAttribute('tabindex', '0');
-    div.setAttribute('role', 'button');
-    div.setAttribute('aria-label', role.name);
-    div.dataset.roleId = role.id;
-
-    div.innerHTML = `
-      <span class="rank-badge ${role.badgeClass}">${role.rank}</span>
-      <span class="role-name">${role.name}</span>
-      <span class="role-tagline">${role.tagline}</span>
-      <div class="node-actions">
-        <button class="btn-here" onclick="event.stopPropagation(); setFrom('${role.id}')">I'm here</button>
-        <button class="btn-want" onclick="event.stopPropagation(); setTarget('${role.id}')">I want this</button>
-      </div>
-    `;
-
-    div.addEventListener('click', () => toggleNode(role.id));
-    div.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleNode(role.id); }
-    });
-
-    grid.appendChild(div);
+function getFurtherChain(fromId, targetId) {
+  // From target, show what's reachable further ahead
+  const further = [];
+  let current = targetId;
+  const seen = new Set([fromId, targetId]);
+  while (true) {
+    const neighbors = (GRAPH[current] || []).filter(n => !seen.has(n));
+    if (neighbors.length === 0) break;
+    // Follow primary path (first neighbor)
+    const next = neighbors[0];
+    further.push(ROLES[next].name);
+    seen.add(next);
+    current = next;
+    if (further.length >= 3) break;
   }
-
-  drawArrows();
-}
-
-function toggleNode(id) {
-  const nodes = document.querySelectorAll('.role-node');
-  nodes.forEach(n => {
-    if (n.dataset.roleId === id) {
-      n.classList.toggle('active');
-      activeNode = n.classList.contains('active') ? id : null;
-    } else {
-      n.classList.remove('active');
-    }
-  });
+  if (further.length === 0) return '';
+  return 'Further ahead: ' + further.map(n => '\u2192 ' + n).join(' ');
 }
 
 /* ══════════════════════════════════════
-   SVG ARROWS
+   STATE
    ══════════════════════════════════════ */
-function drawArrows() {
-  const svg = document.getElementById('mapSvg');
-  // Clear existing lines
-  while (svg.children.length > 1) svg.removeChild(svg.lastChild);
-
-  if (window.innerWidth <= 640) return; // no arrows on small screens
-
-  const edges = [
-    { from: 'tm', to: 'trainer', color: 'var(--path-leadership)', marker: 'arrow-red' },
-    { from: 'trainer', to: 'tl', color: 'var(--path-leadership)', marker: 'arrow-red' },
-    { from: 'tl', to: 'ad', color: 'var(--path-leadership)', marker: 'arrow-red' },
-    { from: 'ad', to: 'opsDir', color: 'var(--path-leadership)', marker: 'arrow-red' },
-    { from: 'ad', to: 'spcDir', color: 'var(--path-leadership)', marker: 'arrow-red' },
-    { from: 'trainer', to: 'specTrainer', color: 'var(--path-training)', marker: 'arrow-green' },
-    { from: 'tm', to: 'specialist', color: 'var(--path-specialist)', marker: 'arrow-blue' },
-    { from: 'specialist', to: 'tl', color: 'var(--path-specialist)', marker: 'arrow-blue' },
-    { from: 'tm', to: 'core', color: 'var(--path-core)', marker: 'arrow-gold' },
-  ];
-
-  const grid = document.getElementById('mapGrid');
-  const gridRect = grid.getBoundingClientRect();
-  const svgRect = svg.getBoundingClientRect();
-
-  edges.forEach(edge => {
-    const fromEl = grid.querySelector(`[data-role-id="${edge.from}"]`);
-    const toEl = grid.querySelector(`[data-role-id="${edge.to}"]`);
-    if (!fromEl || !toEl) return;
-
-    const fromRect = fromEl.getBoundingClientRect();
-    const toRect = toEl.getBoundingClientRect();
-
-    const x1 = fromRect.left + fromRect.width / 2 - svgRect.left;
-    const y1 = fromRect.top + fromRect.height / 2 - svgRect.top;
-    const x2 = toRect.left + toRect.width / 2 - svgRect.left;
-    const y2 = toRect.top + toRect.height / 2 - svgRect.top;
-
-    // Shorten endpoints to stop at node borders
-    const angle = Math.atan2(y2 - y1, x2 - x1);
-    const startOffset = Math.min(fromRect.width, fromRect.height) / 2 + 4;
-    const endOffset = Math.min(toRect.width, toRect.height) / 2 + 4;
-
-    const sx = x1 + Math.cos(angle) * startOffset;
-    const sy = y1 + Math.sin(angle) * startOffset;
-    const ex = x2 - Math.cos(angle) * endOffset;
-    const ey = y2 - Math.sin(angle) * endOffset;
-
-    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-    line.setAttribute('x1', sx);
-    line.setAttribute('y1', sy);
-    line.setAttribute('x2', ex);
-    line.setAttribute('y2', ey);
-    line.setAttribute('stroke', edge.color);
-    line.setAttribute('marker-end', `url(#${edge.marker})`);
-    svg.appendChild(line);
-  });
-}
-
-/* ══════════════════════════════════════
-   SHEET CONTROLS
-   ══════════════════════════════════════ */
+let currentRole = null;
 let selectedFrom = '';
 let selectedTo = '';
 
-function openSheet() {
-  document.getElementById('sheetBackdrop').classList.add('open');
-  document.getElementById('bottomSheet').classList.add('open');
-}
+/* ══════════════════════════════════════
+   SCREEN 1: RENDER WELCOME
+   ══════════════════════════════════════ */
+function renderWelcome() {
+  const container = document.getElementById('roleCards');
+  container.innerHTML = '';
 
-function closeSheet() {
-  document.getElementById('sheetBackdrop').classList.remove('open');
-  document.getElementById('bottomSheet').classList.remove('open');
-}
+  SELECTABLE_ROLES.forEach(id => {
+    const role = ROLES[id];
+    const card = document.createElement('div');
+    card.className = 'role-card';
+    card.setAttribute('tabindex', '0');
+    card.setAttribute('role', 'button');
+    card.setAttribute('aria-label', role.name);
+    card.setAttribute('data-path', role.path);
+    card.dataset.roleId = id;
 
-function setFrom(roleId) {
-  selectedFrom = roleId;
-  openSheet();
-  const sel = document.getElementById('fromRole');
-  sel.value = roleId;
-  onFromChange();
-}
+    card.innerHTML = `
+      <span class="card-badge ${role.badgeClass}">${role.rank}</span>
+      <div class="card-body">
+        <div class="card-name">${role.name}</div>
+        <div class="card-desc">${role.description}</div>
+      </div>
+    `;
 
-function setTarget(roleId) {
-  if (!selectedFrom) {
-    selectedFrom = ''; // force them to pick from
-    openSheet();
-    return;
-  }
-  selectedTo = roleId;
-  openSheet();
-  const sel = document.getElementById('toRole');
-  sel.value = roleId;
-  onToChange();
-}
+    card.addEventListener('click', () => showOptions(id));
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); showOptions(id); }
+    });
 
-function populateFromDropdown() {
-  const sel = document.getElementById('fromRole');
-  // Only roles that have outgoing edges
-  const startRoles = ['tm', 'trainer', 'tl', 'ad', 'specialist'];
-  startRoles.forEach(id => {
-    const opt = document.createElement('option');
-    opt.value = id;
-    opt.textContent = ROLES[id].name;
-    sel.appendChild(opt);
+    container.appendChild(card);
   });
+
+  renderBigPicture();
 }
 
-function onFromChange() {
-  const fromId = document.getElementById('fromRole').value;
-  selectedFrom = fromId;
-  const toSel = document.getElementById('toRole');
-
-  // Reset
-  toSel.innerHTML = '<option value="">Select a goal</option>';
-  toSel.disabled = !fromId;
-  selectedTo = '';
-  updatePreview();
-
-  if (!fromId) return;
-
-  const reachable = getReachable(fromId);
-  reachable.forEach(id => {
-    const opt = document.createElement('option');
-    opt.value = id;
-    const path = findPath(fromId, id);
-    const transitions = pathToTransitions(path);
-    const months = totalRunway(transitions);
-    const suffix = months > 0 ? ` (${formatRunway(months)})` : '';
-    opt.textContent = ROLES[id].name + suffix;
-    toSel.appendChild(opt);
-  });
+function renderBigPicture() {
+  const tree = document.getElementById('pathTree');
+  tree.innerHTML = `
+    <div class="tree-branch tree-leadership">
+      <div class="tree-label">Leadership Path</div>
+      <div class="tree-path">
+        <span class="tree-node">Team Member</span>
+        <span class="tree-arrow">\u2192</span>
+        <span class="tree-node">Certified Trainer</span>
+        <span class="tree-arrow">\u2192</span>
+        <span class="tree-node">Team Leader</span>
+        <span class="tree-arrow">\u2192</span>
+        <span class="tree-node">Asst Director</span>
+        <span class="tree-arrow">\u2192</span>
+        <span class="tree-node">Ops Director</span>
+      </div>
+    </div>
+    <div class="tree-branch tree-leadership">
+      <div class="tree-label">Specialty Path</div>
+      <div class="tree-path">
+        <span class="tree-node">Team Member</span>
+        <span class="tree-arrow">\u2192</span>
+        <span class="tree-node">Certified Trainer</span>
+        <span class="tree-arrow">\u2192</span>
+        <span class="tree-node">Team Leader</span>
+        <span class="tree-arrow">\u2192</span>
+        <span class="tree-node">Asst Director</span>
+        <span class="tree-arrow">\u2192</span>
+        <span class="tree-node">Specialty Director</span>
+      </div>
+    </div>
+    <div class="tree-branch tree-training">
+      <div class="tree-label">Training Path</div>
+      <div class="tree-path">
+        <span class="tree-node">Team Member</span>
+        <span class="tree-arrow">\u2192</span>
+        <span class="tree-node">Certified Trainer</span>
+        <span class="tree-arrow">\u2192</span>
+        <span class="tree-node">Specialized Trainer</span>
+        <span class="tree-arrow">\u2192</span>
+        <span class="tree-node">Team Leader</span>
+      </div>
+    </div>
+    <div class="tree-branch tree-specialist">
+      <div class="tree-label">Specialist Path</div>
+      <div class="tree-path">
+        <span class="tree-node">Team Member</span>
+        <span class="tree-arrow">\u2192</span>
+        <span class="tree-node">Station Specialist</span>
+        <span class="tree-arrow">\u2192</span>
+        <span class="tree-node">Team Leader</span>
+      </div>
+    </div>
+    <div class="tree-branch tree-core">
+      <div class="tree-label">Core Contributor</div>
+      <div class="tree-path">
+        <span class="tree-node">Team Member</span>
+        <span class="tree-arrow">\u2192</span>
+        <span class="tree-node">Core Contributor</span>
+        <span class="tree-arrow">\u2192</span>
+        <span class="tree-node">Certified Trainer</span>
+        <span style="font-size:.78rem;color:var(--text-lighter);margin-left:.25rem">(re-entry)</span>
+      </div>
+    </div>
+  `;
 }
 
-function onToChange() {
-  selectedTo = document.getElementById('toRole').value;
-  updatePreview();
-}
-
-function updatePreview() {
-  const preview = document.getElementById('runwayPreview');
-  const goBtn = document.getElementById('sheetGo');
-
-  if (!selectedFrom || !selectedTo) {
-    preview.innerHTML = 'Select both roles to see your path';
-    goBtn.disabled = true;
-    return;
-  }
-
-  const path = findPath(selectedFrom, selectedTo);
-  if (!path) {
-    preview.innerHTML = 'No path found between these roles';
-    goBtn.disabled = true;
-    return;
-  }
-
-  const transitions = pathToTransitions(path);
-  const months = totalRunway(transitions);
-  const steps = transitions.length;
-
-  let html = `<strong>${formatRunway(months)}</strong>&nbsp; estimated &nbsp;·&nbsp; ${steps} step${steps !== 1 ? 's' : ''}`;
-
-  // Check if any step is seat dependent
-  const seatDependent = transitions.some(t => t.runway.includes('seat'));
-  if (seatDependent) {
-    html += `<br><span style="font-size:.78rem;color:var(--text-lighter)">Some steps depend on seat availability</span>`;
-  }
-
-  preview.innerHTML = html;
-  goBtn.disabled = false;
+function toggleBigPicture() {
+  document.getElementById('bigPicture').classList.toggle('open');
 }
 
 /* ══════════════════════════════════════
-   LAYER 3: RENDER ROADMAP
+   SCREEN 2: RENDER OPTIONS
    ══════════════════════════════════════ */
+function showOptions(roleId) {
+  currentRole = roleId;
+  const role = ROLES[roleId];
+
+  // Update header
+  document.getElementById('optionsTitle').innerHTML = 'You\'re a <strong>' + role.name + '</strong>';
+
+  // Get direct next steps and further destinations
+  const directTargets = GRAPH[roleId] || [];
+  const allReachable = getReachable(roleId);
+
+  // Build body
+  const body = document.getElementById('optionsBody');
+  let html = '';
+
+  // --- Next Steps ---
+  if (directTargets.length > 0) {
+    html += '<div class="section-label">Next steps</div>';
+    html += '<div class="option-cards">';
+
+    directTargets.forEach(targetId => {
+      const target = ROLES[targetId];
+      const transKey = roleId + '->' + targetId;
+      const trans = TRANSITIONS[transKey];
+      const desc = OPTION_DESCS[transKey] || target.description;
+      const further = getFurtherChain(roleId, targetId);
+      const isPlaceholder = trans && trans.placeholder;
+
+      html += `<div class="option-card">
+        <div class="option-card-header">
+          <span class="card-badge ${target.badgeClass}">${target.rank}</span>
+          <span class="option-role-name">${target.name}</span>
+          ${trans ? `<span class="runway-badge">${trans.runway}</span>` : ''}
+        </div>
+        <div class="option-card-desc">${desc}</div>
+        ${further ? `<div class="option-further">${further}</div>` : ''}
+        ${isPlaceholder
+          ? `<div class="placeholder-note">${trans.placeholderNote}</div>`
+          : `<button class="option-cta" onclick="startRoadmap('${roleId}','${targetId}')">Show me how \u2192</button>`
+        }
+      </div>`;
+    });
+
+    html += '</div>';
+  }
+
+  // --- Further Destinations (multi-step) ---
+  const furtherTargets = [];
+  allReachable.forEach(id => {
+    if (directTargets.includes(id)) return;
+    const path = findPath(roleId, id);
+    if (!path) return;
+    const transitions = pathToTransitions(path);
+    const steps = transitions.length;
+    const months = totalRunway(transitions);
+    furtherTargets.push({ id, steps, months });
+  });
+
+  // Sort by steps then months
+  furtherTargets.sort((a, b) => a.steps - b.steps || a.months - b.months);
+
+  if (furtherTargets.length > 0) {
+    html += '<div class="section-label">Further destinations</div>';
+    html += '<div class="further-cards">';
+
+    furtherTargets.forEach(ft => {
+      const target = ROLES[ft.id];
+      const runwayText = ft.months > 0 ? formatRunway(ft.months) : 'No fixed timeline';
+      const isPlaceholder = target.placeholder;
+
+      html += `<div class="further-card">
+        <div class="further-card-info">
+          <div class="further-card-name">${target.name}</div>
+          <div class="further-card-meta">${ft.steps} step${ft.steps !== 1 ? 's' : ''} &middot; ~${runwayText}</div>
+        </div>
+        ${isPlaceholder
+          ? ''
+          : `<button class="further-cta" onclick="startRoadmap('${roleId}','${ft.id}')">Plan this journey \u2192</button>`
+        }
+      </div>`;
+    });
+
+    html += '</div>';
+  }
+
+  if (directTargets.length === 0) {
+    html += '<div class="placeholder-note" style="text-align:center;padding:2rem 0;">No further transitions are defined for this role yet.</div>';
+  }
+
+  body.innerHTML = html;
+
+  // Show options view, hide welcome
+  document.getElementById('welcome-view').style.display = 'none';
+  document.getElementById('options-view-wrapper').style.display = '';
+  document.getElementById('roadmapView').classList.remove('visible');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ══════════════════════════════════════
+   SCREEN 3: RENDER ROADMAP
+   ══════════════════════════════════════ */
+function startRoadmap(fromId, toId) {
+  selectedFrom = fromId;
+  selectedTo = toId;
+  showRoadmap();
+}
+
 function showRoadmap() {
   if (!selectedFrom || !selectedTo) return;
 
@@ -1678,27 +1843,51 @@ function showRoadmap() {
 
   // Update header
   document.getElementById('roadmapTitle').textContent =
-    ROLES[selectedFrom].name + ' → ' + ROLES[selectedTo].name;
+    ROLES[selectedFrom].name + ' \u2192 ' + ROLES[selectedTo].name;
   document.getElementById('roadmapSubtitle').textContent =
     transitions.length + ' step' + (transitions.length !== 1 ? 's' : '') +
-    ' · ' + formatRunway(months) + ' estimated runway';
+    ' \u00b7 ' + formatRunway(months) + ' estimated runway';
 
   // Build timeline
   const timeline = document.getElementById('timeline');
   timeline.innerHTML = '';
 
   transitions.forEach((t, i) => {
-    const step = document.createElement('div');
-    step.className = 'step';
+    if (t.placeholder) {
+      // Render placeholder step
+      const step = document.createElement('div');
+      step.className = 'step';
+      step.innerHTML = `
+        <span class="step-number">${i + 1}</span>
+        <div class="step-card">
+          <div class="step-header">
+            <div class="step-from-to">${ROLES[t.from].name} \u2192 ${ROLES[t.to].name}</div>
+            <div class="step-runway">Runway: <strong>${t.runway}</strong></div>
+          </div>
+          <div class="key-question">
+            <span class="kq-label">The key question</span>
+            ${t.keyQuestion}
+          </div>
+          <div style="padding:1rem 1.25rem;">
+            <div class="placeholder-note">${t.placeholderNote}</div>
+          </div>
+        </div>
+      `;
+      timeline.appendChild(step);
+      return;
+    }
 
     const compCount = t.competencies.length;
     const opsCount = t.operationalSkills.length;
+
+    const step = document.createElement('div');
+    step.className = 'step';
 
     step.innerHTML = `
       <span class="step-number">${i + 1}</span>
       <div class="step-card">
         <div class="step-header">
-          <div class="step-from-to">${ROLES[t.from].name} → ${ROLES[t.to].name}</div>
+          <div class="step-from-to">${ROLES[t.from].name} \u2192 ${ROLES[t.to].name}</div>
           <div class="step-runway">Minimum runway: <strong>${t.runway}</strong></div>
         </div>
 
@@ -1743,9 +1932,9 @@ function showRoadmap() {
     timeline.appendChild(step);
   });
 
-  // Show roadmap, hide map
-  document.getElementById('map-view').style.display = 'none';
-  closeSheet();
+  // Show roadmap, hide others
+  document.getElementById('welcome-view').style.display = 'none';
+  document.getElementById('options-view-wrapper').style.display = 'none';
   document.getElementById('roadmapView').classList.add('visible');
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
@@ -1757,13 +1946,13 @@ function renderCompetency(c) {
       <div class="comp-name">${c.name}</div>
       <div class="comp-desc">${c.description}</div>
       <button class="rubric-toggle" onclick="toggleRubric('${rubricId}', this)">
-        See full rubric ▸
+        See full rubric \u25b8
       </button>
       <div class="rubric-body" id="${rubricId}">
         <div class="rubric-grid">
           ${c.rubric.map(r => `
             <div class="rubric-level${r.graduation ? ' graduation' : ''}">
-              <div class="rl-label">Level ${r.level} — ${r.label}${r.graduation ? ' ← Graduation' : ''}</div>
+              <div class="rl-label">Level ${r.level} \u2014 ${r.label}${r.graduation ? ' \u2190 Graduation' : ''}</div>
               ${r.text}
             </div>
           `).join('')}
@@ -1784,35 +1973,33 @@ function toggleExpand(btn) {
 function toggleRubric(id, btn) {
   const body = document.getElementById(id);
   const isOpen = body.classList.toggle('open');
-  btn.textContent = isOpen ? 'Hide rubric ▾' : 'See full rubric ▸';
+  btn.textContent = isOpen ? 'Hide rubric \u25be' : 'See full rubric \u25b8';
 }
 
-function backToMap() {
+/* ══════════════════════════════════════
+   NAVIGATION
+   ══════════════════════════════════════ */
+function showWelcome() {
+  document.getElementById('welcome-view').style.display = '';
+  document.getElementById('options-view-wrapper').style.display = 'none';
   document.getElementById('roadmapView').classList.remove('visible');
-  document.getElementById('map-view').style.display = '';
+  currentRole = null;
   window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function backToOptions() {
+  if (currentRole) {
+    showOptions(currentRole);
+  } else {
+    showWelcome();
+  }
 }
 
 /* ══════════════════════════════════════
    INIT
    ══════════════════════════════════════ */
 function init() {
-  renderMap();
-  populateFromDropdown();
-  window.addEventListener('resize', () => { drawArrows(); });
-
-  // Close sheet on Escape
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeSheet();
-  });
-
-  // Close node actions on outside click
-  document.addEventListener('click', (e) => {
-    if (!e.target.closest('.role-node')) {
-      document.querySelectorAll('.role-node.active').forEach(n => n.classList.remove('active'));
-      activeNode = null;
-    }
-  });
+  renderWelcome();
 }
 
 init();
