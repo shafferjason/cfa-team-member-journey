@@ -802,7 +802,7 @@ button {
     <div class="welcome-body">
       <div class="welcome-intro">
         <p>This framework shows every role you can grow into and what it takes to get there — the competencies, operational skills, and key questions that define each transition.</p>
-        <p>Start by selecting your current role. We'll show you where you can go and exactly how to get there.</p>
+        <p>Start by selecting your current role. We'll show you where you can go and exactly how to get there. Timelines are estimates — some people move faster, others take longer depending on their competencies, mindset, and drive.</p>
       </div>
 
       <div class="role-prompt">Where are you right now?</div>
@@ -1758,7 +1758,7 @@ function showOptions(roleId) {
         <div class="option-card-header">
           <span class="card-badge ${target.badgeClass}">${target.rank}</span>
           <span class="option-role-name">${target.name}</span>
-          ${trans ? `<span class="runway-badge">${trans.runway}</span>` : ''}
+          ${trans ? `<span class="runway-badge">~${trans.runway}</span>` : ''}
         </div>
         <div class="option-card-desc">${desc}</div>
         ${further ? `<div class="option-further">${further}</div>` : ''}
@@ -1847,7 +1847,7 @@ function showRoadmap() {
     ROLES[selectedFrom].name + ' \u2192 ' + ROLES[selectedTo].name;
   document.getElementById('roadmapSubtitle').textContent =
     transitions.length + ' step' + (transitions.length !== 1 ? 's' : '') +
-    ' \u00b7 ' + formatRunway(months) + ' estimated runway';
+    ' \u00b7 ~' + formatRunway(months) + ' estimated';
 
   // Build timeline
   const timeline = document.getElementById('timeline');
@@ -1889,7 +1889,7 @@ function showRoadmap() {
       <div class="step-card">
         <div class="step-header">
           <div class="step-from-to">${ROLES[t.from].name} \u2192 ${ROLES[t.to].name}</div>
-          <div class="step-runway">Minimum runway: <strong>${t.runway}</strong></div>
+          <div class="step-runway">Estimated timeline: <strong>~${t.runway}</strong></div>
         </div>
 
         <div class="key-question">
