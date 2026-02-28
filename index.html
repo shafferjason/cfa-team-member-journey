@@ -800,6 +800,386 @@ button {
 }
 
 /* ══════════════════════════════════════
+   RESOURCE COMPONENTS (INLINE + LIBRARY)
+   ══════════════════════════════════════ */
+
+/* Inline resource toggle within competency */
+.resource-toggle {
+  font-size: .75rem;
+  font-weight: 600;
+  color: var(--gold);
+  padding: .2rem 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: .25rem;
+  transition: color .15s;
+  background: none; border: none;
+  margin-left: .75rem;
+}
+.resource-toggle:hover { color: var(--red); }
+.resource-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .3s var(--ease);
+}
+.resource-body.open {
+  max-height: 3000px;
+}
+.resource-content {
+  padding: .5rem 0 .25rem;
+}
+
+/* Resource section grouping */
+.resource-section {
+  margin-bottom: .75rem;
+}
+.resource-section:last-child { margin-bottom: 0; }
+.resource-type-label {
+  font-size: .7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--text-lighter);
+  margin-bottom: .35rem;
+  display: flex;
+  align-items: center;
+  gap: .35rem;
+}
+.resource-type-label .rt-icon {
+  font-size: .85rem;
+  line-height: 1;
+}
+
+/* Individual resource item */
+.resource-item {
+  background: var(--cream);
+  border-radius: var(--radius);
+  padding: .55rem .75rem;
+  margin-bottom: .35rem;
+  font-size: .78rem;
+  line-height: 1.45;
+}
+.resource-item:last-child { margin-bottom: 0; }
+.resource-item .ri-title {
+  font-weight: 600;
+  color: var(--charcoal);
+}
+.resource-item .ri-author {
+  color: var(--text-light);
+}
+.resource-item .ri-detail {
+  color: var(--text-lighter);
+  font-style: italic;
+}
+.resource-item .ri-why {
+  color: var(--text);
+  margin-top: .15rem;
+}
+.resource-item a {
+  color: var(--red);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: .72rem;
+}
+.resource-item a:hover { text-decoration: underline; }
+
+/* AI Prompt callout */
+.ai-prompt-callout {
+  background: linear-gradient(135deg, #F0F4FF, #E8EEFF);
+  border-left: 3px solid #5B7BD5;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: .65rem .85rem;
+  margin-top: .5rem;
+  font-size: .78rem;
+  line-height: 1.5;
+}
+.ai-prompt-callout .apc-label {
+  font-size: .68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: #5B7BD5;
+  display: flex;
+  align-items: center;
+  gap: .3rem;
+  margin-bottom: .25rem;
+}
+.ai-prompt-callout .apc-text {
+  color: var(--charcoal-light);
+  font-style: italic;
+}
+
+/* Guidance items (foundation tier) */
+.guidance-item {
+  display: flex;
+  align-items: flex-start;
+  gap: .5rem;
+  padding: .4rem 0;
+  font-size: .78rem;
+  line-height: 1.45;
+  color: var(--text);
+}
+.guidance-item::before {
+  content: '\2713';
+  flex-shrink: 0;
+  color: var(--gold);
+  font-weight: 700;
+  font-size: .85rem;
+  line-height: 1.3;
+}
+
+/* ── Persistent Library Link ── */
+.persistent-link {
+  display: flex;
+  justify-content: center;
+  padding: .5rem 1rem;
+  background: var(--cream-dark);
+  border-bottom: 1px solid var(--border-light);
+}
+.persistent-link a {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  font-size: .78rem;
+  font-weight: 600;
+  color: var(--text-light);
+  text-decoration: none;
+  transition: color .15s;
+}
+.persistent-link a:hover { color: var(--red); }
+.persistent-link a svg { width: 14px; height: 14px; }
+
+/* ── Library View ── */
+.library-view {
+  display: none;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 clamp(1rem, 3vw, 2rem) 4rem;
+}
+.library-view.visible { display: block; }
+
+.library-header {
+  background: linear-gradient(165deg, var(--charcoal) 0%, #1a1a1a 40%, var(--red-dark) 100%);
+  color: #fff;
+  padding: clamp(2rem, 5vw, 3rem) clamp(1rem, 4vw, 2rem) 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+.library-header::before {
+  content: '';
+  position: absolute; top: -50%; right: -20%; width: 70%; height: 200%;
+  background: radial-gradient(ellipse, rgba(200,16,46,.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+.library-header h2 { color: #fff; margin-bottom: .35rem; position: relative; z-index: 1; }
+.library-header p { color: rgba(255,255,255,.7); font-size: .95rem; position: relative; z-index: 1; }
+
+.library-back {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  padding: .5rem .75rem;
+  font-size: .88rem;
+  font-weight: 600;
+  color: rgba(255,255,255,.7);
+  border-radius: var(--radius);
+  transition: color .15s;
+  margin-bottom: .75rem;
+  position: relative;
+  z-index: 1;
+  background: none; border: none;
+  cursor: pointer;
+}
+.library-back:hover { color: #fff; }
+.library-back svg { width: 16px; height: 16px; }
+
+.library-body {
+  padding: 1.5rem 0;
+}
+
+/* Quick-jump nav */
+.library-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  margin-bottom: 1.75rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+.library-nav a {
+  display: inline-block;
+  padding: .35rem .75rem;
+  font-size: .78rem;
+  font-weight: 600;
+  color: var(--text-light);
+  background: var(--cream-dark);
+  border-radius: 20px;
+  text-decoration: none;
+  transition: all .15s;
+}
+.library-nav a:hover { background: var(--red); color: #fff; }
+
+/* Library sections */
+.library-section {
+  margin-bottom: 2rem;
+}
+.library-section-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--charcoal);
+  margin-bottom: .25rem;
+  padding-top: .5rem;
+}
+.library-section-desc {
+  font-size: .85rem;
+  color: var(--text-light);
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.library-comp-group {
+  margin-bottom: 1.5rem;
+}
+.library-comp-name {
+  font-weight: 700;
+  font-size: .92rem;
+  color: var(--charcoal);
+  margin-bottom: .5rem;
+  padding-bottom: .25rem;
+  border-bottom: 1px solid var(--border-light);
+}
+
+/* How-to steps */
+.how-to-steps {
+  counter-reset: step;
+  list-style: none;
+  padding: 0;
+  margin-bottom: 1.5rem;
+}
+.how-to-steps li {
+  counter-increment: step;
+  position: relative;
+  padding: .4rem 0 .4rem 2rem;
+  font-size: .85rem;
+  color: var(--text);
+  line-height: 1.5;
+}
+.how-to-steps li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: .35rem;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: var(--red);
+  color: #fff;
+  font-size: .7rem;
+  font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* Dev time table */
+.dev-time-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .82rem;
+  margin-bottom: 1rem;
+}
+.dev-time-table th {
+  text-align: left;
+  padding: .5rem .75rem;
+  background: var(--cream-dark);
+  font-weight: 700;
+  font-size: .72rem;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: var(--text-lighter);
+  border-bottom: 2px solid var(--border);
+}
+.dev-time-table td {
+  padding: .5rem .75rem;
+  border-bottom: 1px solid var(--border-light);
+  color: var(--text);
+}
+.dev-time-table td:first-child { font-weight: 600; color: var(--charcoal); }
+
+/* Cadence table */
+.cadence-group {
+  margin-bottom: 1.25rem;
+}
+.cadence-group:last-child { margin-bottom: 0; }
+.cadence-role {
+  font-weight: 700;
+  font-size: .88rem;
+  color: var(--charcoal);
+  margin-bottom: .35rem;
+}
+.cadence-item {
+  display: flex;
+  gap: .75rem;
+  padding: .3rem 0;
+  font-size: .82rem;
+  line-height: 1.45;
+}
+.cadence-freq {
+  font-weight: 600;
+  color: var(--red);
+  min-width: 80px;
+  flex-shrink: 0;
+}
+.cadence-detail { color: var(--text); }
+
+/* Project learning */
+.project-item {
+  display: flex;
+  gap: .75rem;
+  padding: .4rem 0;
+  font-size: .82rem;
+  line-height: 1.45;
+  border-bottom: 1px solid var(--border-light);
+}
+.project-item:last-child { border-bottom: none; }
+.project-comp {
+  font-weight: 600;
+  color: var(--charcoal);
+  min-width: 80px;
+  flex-shrink: 0;
+}
+
+/* Welcome library button */
+.welcome-library-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .4rem;
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto;
+  padding: .75rem 1.25rem;
+  font-size: .9rem;
+  font-weight: 600;
+  color: var(--text);
+  background: var(--warm-white);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all var(--dur) var(--ease);
+}
+.welcome-library-btn:hover {
+  border-color: var(--gold);
+  color: var(--charcoal);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+.welcome-library-btn svg { width: 18px; height: 18px; color: var(--gold); }
+.welcome-library-wrap {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+/* ══════════════════════════════════════
    UTILITY
    ══════════════════════════════════════ */
 .sr-only {
@@ -831,6 +1211,13 @@ button {
         <!-- Rendered by JS -->
       </div>
 
+      <div class="welcome-library-wrap">
+        <button class="welcome-library-btn" onclick="showLibrary()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          Development Resource Library
+        </button>
+      </div>
+
       <div class="big-picture-section" id="bigPicture">
         <button class="big-picture-toggle" onclick="toggleBigPicture()">
           See the big picture
@@ -847,6 +1234,12 @@ button {
 
   <!-- SCREEN 2: Your Options -->
   <div id="options-view-wrapper" style="display:none;">
+    <div class="persistent-link">
+      <a href="#" onclick="showLibrary(); return false;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        Resource Library
+      </a>
+    </div>
     <div class="options-header">
       <button class="options-back" onclick="showWelcome()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
@@ -865,6 +1258,12 @@ button {
 
   <!-- SCREEN 3: Roadmap Stepper -->
   <div class="roadmap-view" id="roadmapView">
+    <div class="persistent-link" id="roadmapLibLink">
+      <a href="#" onclick="showLibrary(); return false;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        Resource Library
+      </a>
+    </div>
     <button class="roadmap-back" id="roadmapBackBtn" onclick="backToOptions()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
       Back to my options
@@ -874,6 +1273,23 @@ button {
     <p class="roadmap-subtitle" id="roadmapSubtitle"></p>
 
     <div class="timeline" id="timeline"></div>
+  </div>
+
+  <!-- SCREEN 4: Resource Library -->
+  <div id="library-view-wrapper" style="display:none;">
+    <div class="library-header">
+      <button class="library-back" onclick="backFromLibrary()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        Back
+      </button>
+      <h2>Development Resource Library</h2>
+      <p>Books, videos, podcasts, and AI reflection prompts for every competency.</p>
+    </div>
+    <div class="library-view visible" id="libraryView">
+      <div class="library-body" id="libraryBody">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
   </div>
 </div>
 
@@ -1553,6 +1969,245 @@ const GRAPH = {
 };
 
 /* ══════════════════════════════════════
+   RESOURCES DATA
+   ══════════════════════════════════════ */
+const RESOURCES = {
+  // ─── Team Leader Tier ───
+  'Interpersonal': {
+    tier: 'Team Leader',
+    resources: [
+      { type: 'book', title: 'Crucial Conversations', author: 'Kerry Patterson, Joseph Grenny, et al.', detail: 'Ch. 5 "Make It Safe" and Ch. 7 "STATE My Path"', why: 'The gold standard for navigating high-stakes conversations. Teaches how to create safety, listen actively, and restate others\' views.' },
+      { type: 'book', title: 'Thanks for the Feedback', author: 'Douglas Stone and Sheila Heen', detail: 'Ch. 1-3 on the three triggers', why: 'Teaches how to receive feedback well. Identifies three triggers (truth, relationship, identity) that cause us to reject criticism.' },
+      { type: 'book', title: 'Nonviolent Communication', author: 'Marshall B. Rosenberg', detail: '', why: 'The observation-feeling-need-request framework is practical for restaurant floor conflicts and team dynamics.' },
+      { type: 'video', title: 'How to Use Others\' Feedback to Learn and Grow', author: 'Sheila Heen', detail: 'TEDxAmoskeagMillyard', why: 'Explains the three triggers that cause us to dismiss feedback. Short and practical.', url: 'https://www.youtube.com/results?search_query=Sheila+Heen+TEDx+feedback' },
+      { type: 'video', title: 'Extreme Ownership', author: 'Jocko Willink', detail: 'TEDxUniversityofNevada, 2017', why: 'How taking full ownership — not blame-shifting — transforms leadership.', url: 'https://www.youtube.com/results?search_query=Jocko+Willink+TEDx+Extreme+Ownership' },
+      { type: 'video', title: 'How to Lead with Radical Candor', author: 'Kim Scott', detail: 'TEDxPortland', why: 'The Care Personally + Challenge Directly framework for giving and receiving honest feedback.', url: 'https://www.youtube.com/results?search_query=Kim+Scott+TEDx+Radical+Candor' },
+      { type: 'podcast', title: 'How Effective Leaders Handle Criticism, Parts 1 & 2', author: 'Craig Groeschel Leadership Podcast', detail: '~30 min each', why: 'Breaks down types of critics and how to respond.', url: 'https://open.spotify.com/search/craig%20groeschel%20handle%20criticism' },
+      { type: 'podcast', title: 'Radical Candor Podcast', author: 'Kim Scott, Jason Rosoff, Amy Sandler', detail: 'Ongoing series, 20-40 min episodes', why: 'Caring personally while challenging directly.', url: 'https://open.spotify.com/search/radical%20candor%20podcast' }
+    ],
+    aiPrompt: 'I\'m a Team Leader at a Chick-fil-A restaurant. Recently, [describe a situation where you received criticism or had a conflict]. Help me walk through how I could have responded better using the frameworks from \'Crucial Conversations\' (making it safe) and \'Thanks for the Feedback\' (identifying my triggers). Then help me prepare what I would say to go back to that person and have a productive conversation.'
+  },
+  'Courage': {
+    tier: 'Team Leader',
+    resources: [
+      { type: 'book', title: 'Dare to Lead', author: 'Brené Brown', detail: 'Part One: "Rumbling with Vulnerability"', why: 'Defines courage as a teachable skill set. "Daring leaders are never silent about hard things."' },
+      { type: 'book', title: 'Extreme Ownership', author: 'Jocko Willink and Leif Babin', detail: 'Ch. 2 "No Bad Teams, Only Bad Leaders" and Ch. 10 "Leading Up and Down the Chain of Command"', why: 'The courage required to own every problem on your team and speak truth to your chain of command.' },
+      { type: 'book', title: 'The Challenge Culture', author: 'Nigel Travis', detail: 'Former CEO of Dunkin\' Donuts', why: 'Argues that healthy organizations require people at every level to challenge ideas respectfully. Practical guidance from the QSR world.' },
+      { type: 'video', title: 'The Power of Vulnerability', author: 'Brené Brown', detail: 'TED, 2010 — 60M+ views', why: 'Connects vulnerability to courage. The willingness to be uncomfortable is the foundation of brave leadership.', url: 'https://www.youtube.com/results?search_query=Brene+Brown+Power+of+Vulnerability+TED' },
+      { type: 'video', title: 'Listening to Shame', author: 'Brené Brown', detail: 'TED, 2012', why: 'How shame prevents us from speaking up and how courage requires working through it.', url: 'https://www.youtube.com/results?search_query=Brene+Brown+Listening+to+Shame+TED' },
+      { type: 'podcast', title: 'The Heart of Daring Leadership', author: 'Dare to Lead with Brené Brown', detail: '', why: 'Unpacks the first courage skill set: rumbling with vulnerability.', url: 'https://open.spotify.com/search/dare%20to%20lead%20brene%20brown%20daring%20leadership' },
+      { type: 'podcast', title: 'Courageous Leadership, Part 1', author: 'Andy Stanley Leadership Podcast', detail: '', why: 'Explores why people avoid hard conversations and what establishes someone as a leader.', url: 'https://open.spotify.com/search/andy%20stanley%20courageous%20leadership' }
+    ],
+    aiPrompt: 'I\'m a Team Leader and I\'ve noticed a pattern on my team that I think needs to be addressed, but I\'m nervous about bringing it up because [describe your concern]. Using Brené Brown\'s \'rumbling with vulnerability\' framework and Jocko Willink\'s principle of \'leading up the chain of command,\' help me draft what I would say to surface this issue constructively. Frame it as ownership rather than blame.'
+  },
+  'Composure': {
+    tier: 'Team Leader',
+    resources: [
+      { type: 'book', title: 'Stillness Is the Key', author: 'Ryan Holiday', detail: '', why: 'Stoic philosophy showing that inner calm is a leadership weapon. Short chapters on figures who maintained composure under extreme pressure.' },
+      { type: 'book', title: 'Emotional Intelligence', author: 'Daniel Goleman', detail: 'Part Three: "Emotional Intelligence Applied" (self-regulation section)', why: 'The foundational book on EQ. Self-regulation — controlling impulses and maintaining calm.' },
+      { type: 'video', title: 'The Secret Ingredients of Great Hospitality', author: 'Will Guidara', detail: 'TED', why: 'Staying present and creating space for excellence even under pressure.', url: 'https://www.youtube.com/results?search_query=Will+Guidara+TED+hospitality' },
+      { type: 'video', title: 'Why Aren\'t We More Compassionate?', author: 'Daniel Goleman', detail: 'TED, 2007', why: 'How being present with others rather than reactive leads to better outcomes.', url: 'https://www.youtube.com/results?search_query=Daniel+Goleman+TED+compassionate' },
+      { type: 'podcast', title: 'The Daily Stoic', author: 'Ryan Holiday', detail: '5-10 min daily episodes', why: 'Short episodes on staying calm and making clear decisions. Perfect for a commute.', url: 'https://open.spotify.com/search/the%20daily%20stoic%20ryan%20holiday' },
+      { type: 'podcast', title: 'How Effective Leaders Handle Criticism, Part 2', author: 'Craig Groeschel Leadership Podcast', detail: '', why: 'Maintaining composure when receiving criticism.', url: 'https://open.spotify.com/search/craig%20groeschel%20handle%20criticism' }
+    ],
+    aiPrompt: 'I\'m a Team Leader at a Chick-fil-A and I sometimes lose my composure during the lunch rush when things go wrong — [describe a recent situation]. Using Ryan Holiday\'s Stoic principles and Daniel Goleman\'s self-regulation framework, help me build a personal \'composure protocol\' — 3-5 mental practices I can use in the moment to stay calm, think clearly, and be a calming influence on my team.'
+  },
+
+  // ─── Asst Director Tier ───
+  'Mentoring': {
+    tier: 'Asst Director',
+    resources: [
+      { type: 'book', title: 'The Coaching Habit', author: 'Michael Bungay Stanier', detail: '7 essential questions', why: 'Turns any conversation into a coaching moment in 10 minutes or less. Key questions: "What\'s on your mind?" and "What was most useful for you?"' },
+      { type: 'book', title: 'Radical Candor', author: 'Kim Scott', detail: '', why: 'The Care Personally + Challenge Directly operating system for growth-focused feedback.' },
+      { type: 'book', title: 'Multipliers', author: 'Liz Wiseman', detail: '', why: 'Research on 150+ leaders showing "Multipliers" get 2x more from their people. The "Investor" discipline grows people by giving ownership.' },
+      { type: 'video', title: 'How to Lead with Radical Candor', author: 'Kim Scott', detail: 'TEDxPortland', why: 'The 2x2 framework for feedback that develops rather than deflates.', url: 'https://www.youtube.com/results?search_query=Kim+Scott+TEDx+Radical+Candor' },
+      { type: 'video', title: 'TEDx on Multipliers', author: 'Liz Wiseman', detail: '', why: 'How to shift from a Diminisher to a Multiplier leader.', url: 'https://www.youtube.com/results?search_query=Liz+Wiseman+TEDx+Multipliers' },
+      { type: 'video', title: 'The Secret Ingredients of Great Hospitality', author: 'Will Guidara', detail: 'TED', why: 'Demonstrates mentoring through high expectations and genuine care.', url: 'https://www.youtube.com/results?search_query=Will+Guidara+TED+hospitality' },
+      { type: 'podcast', title: 'The Three Big Myths of Mentoring', author: 'WorkLife with Adam Grant', detail: '', why: 'Debunks common misconceptions about mentoring relationships.', url: 'https://open.spotify.com/search/worklife%20adam%20grant%20mentoring' },
+      { type: 'podcast', title: 'Radical Candor Podcast', author: 'Kim Scott', detail: '', why: 'Ongoing practical examples of growth-focused feedback.', url: 'https://open.spotify.com/search/radical%20candor%20podcast' },
+      { type: 'podcast', title: 'Craig Groeschel Leadership Podcast', author: 'Craig Groeschel', detail: '~30 min episodes', why: 'Regularly covers developing leaders and giving feedback that builds confidence.', url: 'https://open.spotify.com/search/craig%20groeschel%20leadership%20podcast' }
+    ],
+    aiPrompt: 'I\'m an Assistant Director at a Chick-fil-A and I need to create a 90-day development plan for a Team Leader who has strong operational skills but struggles with [specific area]. Using \'The Coaching Habit\' (the 7 questions) and \'Radical Candor\' (Care Personally + Challenge Directly), help me: (1) design a plan with specific milestones, (2) draft the conversation I\'d have to present the plan, and (3) suggest 2-3 coaching questions for our weekly check-ins.'
+  },
+  'Integrity': {
+    tier: 'Asst Director',
+    resources: [
+      { type: 'book', title: 'Leaders Eat Last', author: 'Simon Sinek', detail: '', why: 'The "Circle of Safety" concept: leaders sacrifice comfort for those in their care.' },
+      { type: 'book', title: 'Setting the Table', author: 'Danny Meyer', detail: 'Founder of Union Square Hospitality / Shake Shack', why: 'Service vs. hospitality distinction. Values-based leadership from the restaurant industry.' },
+      { type: 'book', title: 'Good to Great', author: 'Jim Collins', detail: 'Ch. 2 "Level 5 Leadership"', why: 'Level 5 leaders take the blame, give away the credit. Research-backed integrity in leadership.' },
+      { type: 'video', title: 'How Great Leaders Inspire Action', author: 'Simon Sinek', detail: 'TED, 2009 — 60M+ views', why: 'Leaders who communicate from purpose first earn trust and inspire action.', url: 'https://www.youtube.com/results?search_query=Simon+Sinek+Start+With+Why+TED' },
+      { type: 'video', title: 'Why Good Leaders Make You Feel Safe', author: 'Simon Sinek', detail: 'TED, 2014', why: 'How leaders who create a circle of safety earn their people\'s trust.', url: 'https://www.youtube.com/results?search_query=Simon+Sinek+leaders+feel+safe+TED' },
+      { type: 'podcast', title: 'Living Into Our Values', author: 'Dare to Lead with Brené Brown', detail: '', why: 'Identifying your two core values, defining behaviors that support them, and recognizing what gets in the way.', url: 'https://open.spotify.com/search/dare%20to%20lead%20living%20into%20values' },
+      { type: 'podcast', title: 'Integrity in the Life of a Leader', author: 'Andy Stanley Leadership Podcast', detail: '', why: 'What integrity looks like in the daily life of a leader.', url: 'https://open.spotify.com/search/andy%20stanley%20integrity%20leader' },
+      { type: 'podcast', title: 'Shake Shack: Danny Meyer', author: 'How I Built This with Guy Raz', detail: '', why: 'A real-world case study of integrity under growth pressure from the restaurant industry.', url: 'https://open.spotify.com/search/how%20i%20built%20this%20danny%20meyer' }
+    ],
+    aiPrompt: 'I\'m an Assistant Director at a Chick-fil-A and I want to make sure my daily behavior is consistent with the values I talk about with my team. Help me do Brené Brown\'s \'Living Into Our Values\' exercise: (1) Help me identify my top two core values. (2) For each, define 3 observable behaviors that demonstrate that value in a restaurant context. (3) Identify 3 \'slippery behaviors\' — things I might do under pressure that contradict those values. (4) Create a weekly self-check I can do in 5 minutes every Sunday night.'
+  },
+  'Decisions': {
+    tier: 'Asst Director',
+    resources: [
+      { type: 'book', title: 'Decisive', author: 'Chip Heath and Dan Heath', detail: 'The WRAP framework', why: 'Widen options, Reality-test assumptions, Attain distance, Prepare to be wrong. People who consider one additional alternative do 6x better.' },
+      { type: 'book', title: 'Essentialism', author: 'Greg McKeown', detail: '', why: '"If you don\'t prioritize your life, someone else will." Directly applicable to leaders facing hundreds of micro-decisions daily.' },
+      { type: 'video', title: 'How to Make Better Decisions', author: 'Chip Heath', detail: 'Talks at Google / Stanford', why: 'The WRAP framework with engaging real-world examples.', url: 'https://www.youtube.com/results?search_query=Chip+Heath+Decisive+better+decisions' },
+      { type: 'podcast', title: 'Make Better Decisions With These Key Principles', author: 'EntreLeadership Podcast', detail: 'With Dave Ramsey', why: 'Why indecision is worse than a wrong decision.', url: 'https://open.spotify.com/search/entreleadership%20better%20decisions' },
+      { type: 'podcast', title: 'Craig Groeschel Leadership Podcast', author: 'Craig Groeschel', detail: '', why: 'Frequently covers decision-making frameworks in practical, accessible episodes.', url: 'https://open.spotify.com/search/craig%20groeschel%20leadership%20podcast' }
+    ],
+    aiPrompt: 'I\'m an Assistant Director at a Chick-fil-A and I\'m facing a tough decision: [describe the decision]. Walk me through the WRAP framework from \'Decisive\': (1) Help me Widen my options beyond a simple yes/no. (2) Help me Reality-test my assumptions — what might I be wrong about? (3) Help me Attain distance — what would I advise a friend in this situation? (4) Help me Prepare to be wrong — what\'s my Plan B?'
+  },
+  'Results': {
+    tier: 'Asst Director',
+    resources: [
+      { type: 'book', title: 'Excellence Wins', author: 'Horst Schulze', detail: 'Co-founder of The Ritz-Carlton', why: 'Every time you permanently eliminate a mistake, you save money and improve your product simultaneously. Continuous improvement from hospitality.' },
+      { type: 'book', title: 'Unreasonable Hospitality', author: 'Will Guidara', detail: '', why: 'Transforming Eleven Madison Park into the world\'s best restaurant by relentlessly pursuing results through hospitality.' },
+      { type: 'book', title: 'The Power of Moments', author: 'Chip Heath and Dan Heath', detail: '', why: 'Four elements that make experiences memorable: elevation, insight, pride, and connection.' },
+      { type: 'video', title: 'The Secret Ingredients of Great Hospitality', author: 'Will Guidara', detail: 'TED', why: 'Pursuing results through unreasonable hospitality.', url: 'https://www.youtube.com/results?search_query=Will+Guidara+TED+hospitality' },
+      { type: 'video', title: 'Business Case for Strengths', author: 'Marcus Buckingham', detail: 'Conference Talk', why: 'Teams achieve higher results when leaders help people play to their strengths.', url: 'https://www.youtube.com/results?search_query=Marcus+Buckingham+business+case+strengths' },
+      { type: 'podcast', title: 'Shake Shack: Danny Meyer', author: 'How I Built This with Guy Raz', detail: '', why: 'How to seize opportunities and pursue results while maintaining quality and values.', url: 'https://open.spotify.com/search/how%20i%20built%20this%20danny%20meyer' },
+      { type: 'podcast', title: 'How to Build a Great Culture (with Danny Meyer)', author: 'WorkLife with Adam Grant', detail: '', why: 'Building a culture of excellence and care that drives results.', url: 'https://open.spotify.com/search/worklife%20adam%20grant%20danny%20meyer' }
+    ],
+    aiPrompt: 'I\'m an Assistant Director at a Chick-fil-A and I want to apply Horst Schulze\'s continuous improvement philosophy and Will Guidara\'s \'unreasonable hospitality\' framework. Help me: (1) Identify 3 recurring operational friction points I could permanently eliminate this quarter. (2) For each, design a simple process improvement. (3) Brainstorm 2-3 \'unreasonable hospitality\' moments we could create for our regular guests that would be memorable but realistic for a QSR environment.'
+  },
+
+  // ─── Director Tier ───
+  'Vision': {
+    tier: 'Director',
+    resources: [
+      { type: 'book', title: 'Start with Why', author: 'Simon Sinek', detail: '', why: 'The Golden Circle (Why, How, What): people don\'t buy what you do, they buy why you do it.' },
+      { type: 'book', title: 'Unreasonable Hospitality', author: 'Will Guidara', detail: '', why: 'A clear vision ("make people feel seen") drove every decision at Eleven Madison Park.' },
+      { type: 'book', title: 'Peak', author: 'Chip Conley', detail: 'Founder of Joie de Vivre Hospitality / Airbnb culture lead', why: 'Applies Maslow\'s Hierarchy to business: a compelling vision addresses higher needs.' },
+      { type: 'video', title: 'How Great Leaders Inspire Action', author: 'Simon Sinek', detail: 'TED, 2009 — 60M+ views', why: 'The definitive talk on communicating vision through purpose.', url: 'https://www.youtube.com/results?search_query=Simon+Sinek+Start+With+Why+TED' },
+      { type: 'video', title: 'The Secret Ingredients of Great Hospitality', author: 'Will Guidara', detail: 'TED', why: 'How a clear hospitality vision translates into specific, memorable actions.', url: 'https://www.youtube.com/results?search_query=Will+Guidara+TED+hospitality' },
+      { type: 'podcast', title: 'How Leaders Lead', author: 'David Novak', detail: 'Former CEO of Yum! Brands', why: 'Top leaders on communicating vision and creating alignment. Direct restaurant/QSR connection.', url: 'https://open.spotify.com/search/how%20leaders%20lead%20david%20novak' },
+      { type: 'podcast', title: 'Leader-Vision: How to See and Sculpt the Future', author: 'Maxwell Leadership Podcast', detail: '', why: 'How to develop, articulate, and transfer a vision to your team.', url: 'https://open.spotify.com/search/maxwell%20leadership%20vision' }
+    ],
+    aiPrompt: 'I\'m a Director at a Chick-fil-A and I need to communicate our franchise\'s vision for the next year to our entire team — from Directors down to new team members. Using Simon Sinek\'s Golden Circle (Why, How, What) and Will Guidara\'s approach, help me: (1) Articulate our \'Why\' in one clear sentence. (2) Translate that into 3 specific \'How\' behaviors every team member can practice daily. (3) Draft a 5-minute vision talk for an all-team meeting that\'s inspiring but concrete enough that people know what to do differently starting tomorrow.'
+  },
+  'Strategy': {
+    tier: 'Director',
+    resources: [
+      { type: 'book', title: 'Good to Great', author: 'Jim Collins', detail: '', why: 'The Hedgehog Concept, the Flywheel Effect, and confronting the brutal facts. Practical strategic thinking framework.' },
+      { type: 'book', title: 'Blue Ocean Strategy', author: 'W. Chan Kim and Renée Mauborgne', detail: '', why: 'Creating new market space rather than competing in crowded "red oceans."' },
+      { type: 'video', title: 'Jim Collins — Talks and lectures', author: 'Jim Collins', detail: 'jimcollins.com/media', why: 'How great organizations translate strategy into action.', url: 'https://www.youtube.com/results?search_query=Jim+Collins+Good+to+Great+talk' },
+      { type: 'video', title: 'Fine Casual', author: 'Danny Meyer', detail: 'TEDxManhattan, 2015', why: 'The strategic insight behind combining fine dining hospitality with casual accessibility — the insight that built Shake Shack.', url: 'https://www.youtube.com/results?search_query=Danny+Meyer+TEDxManhattan+Fine+Casual' },
+      { type: 'podcast', title: 'How Leaders Lead', author: 'David Novak', detail: 'Former CEO of Yum! Brands', why: 'Strategic thinking in competitive restaurant markets.', url: 'https://open.spotify.com/search/how%20leaders%20lead%20david%20novak' },
+      { type: 'podcast', title: 'Shake Shack: Danny Meyer', author: 'How I Built This with Guy Raz', detail: '', why: 'Meyer\'s strategic journey from fine dining to fast casual, reading marketplace dynamics.', url: 'https://open.spotify.com/search/how%20i%20built%20this%20danny%20meyer' }
+    ],
+    aiPrompt: 'I\'m a Director at a Chick-fil-A and I need to think strategically about our restaurant\'s positioning. Using Jim Collins\' Hedgehog Concept and Blue Ocean Strategy\'s framework, help me: (1) Define our Hedgehog Concept as a franchise. (2) Identify 2-3 areas where we might be in a \'red ocean\' and brainstorm \'blue ocean\' differentiation. (3) Analyze what marketplace dynamics (delivery apps, labor market, local competition) I should be watching and how they should influence our next 12-month plan.'
+  },
+  'Balance': {
+    tier: 'Director',
+    resources: [
+      { type: 'book', title: 'Essentialism', author: 'Greg McKeown', detail: '', why: 'Choosing what truly matters and eliminating everything else. Gives permission and a framework for saying no.' },
+      { type: 'book', title: 'Stillness Is the Key', author: 'Ryan Holiday', detail: '', why: 'Intentionally creating space for reflection, solitude, and rest as leadership practices, not luxuries.' },
+      { type: 'book', title: 'Free to Focus', author: 'Michael Hyatt', detail: '', why: 'A system for cutting, automating, and delegating so leaders spend time on their highest-contribution activities.' },
+      { type: 'video', title: 'Business Case for Strengths', author: 'Marcus Buckingham', detail: 'Conference Talk', why: 'Spending time on strengths — not just more hours — drives results. Balance is about doing more of what energizes you.', url: 'https://www.youtube.com/results?search_query=Marcus+Buckingham+business+case+strengths' },
+      { type: 'video', title: 'The Power of Vulnerability', author: 'Brené Brown', detail: 'TED, 2010', why: 'People who live "wholeheartedly" have the courage to set boundaries and say no.', url: 'https://www.youtube.com/results?search_query=Brene+Brown+Power+of+Vulnerability+TED' },
+      { type: 'podcast', title: 'Michael Hyatt on the Fallout from Workaholism', author: 'Carey Nieuwhof Leadership Podcast', detail: 'Ep. 571', why: 'Real-world consequences of workaholism on family and career. Deeply personal and practical.', url: 'https://open.spotify.com/search/carey%20nieuwhof%20michael%20hyatt%20workaholism' },
+      { type: 'podcast', title: 'The Daily Stoic', author: 'Ryan Holiday', detail: '5-10 min daily episodes', why: 'Reflection, presence, and perspective. Perfect for building a reflection habit.', url: 'https://open.spotify.com/search/the%20daily%20stoic%20ryan%20holiday' }
+    ],
+    aiPrompt: 'I\'m a Director at a Chick-fil-A and I\'m struggling with work-life balance. I\'m at the restaurant [X] hours a week and I feel guilty when I\'m not there. Using Essentialism and \'Free to Focus,\' help me: (1) Identify which of my weekly tasks are \'essential\' vs. \'nonessential\' based on my unique contribution as a Director. (2) Identify 3 things I could delegate to my Assistant Directors. (3) Design a realistic weekly schedule with at least one block for personal reflection and one protected evening for family. (4) Draft a conversation I could have with my Operator about sustainable pace.'
+  },
+
+  // ─── Foundation Tier (guidance-based) ───
+  'Caring': {
+    tier: 'Foundation',
+    guidance: [
+      { tip: 'Practice the 5-10-5 rule: make eye contact within 5 feet, greet within 10, and follow up within 5 seconds of interaction.' },
+      { tip: 'Learn one personal detail about each teammate you work with this week. Use it naturally in conversation.' },
+      { tip: 'After every rush, take 30 seconds to check in with one teammate: "How are you doing? Need anything?"' },
+      { tip: 'Watch someone on your team who radiates warmth. Notice specifically what they do differently — then try one of those things.' }
+    ],
+    aiPrompt: 'I\'m working on developing genuine care for guests and teammates at my Chick-fil-A restaurant. I sometimes [describe your challenge — e.g., "go on autopilot during rush" or "struggle to connect with certain teammates"]. Help me come up with 3 small, specific things I can practice on my next shift to show more genuine warmth. Make them realistic for a fast-paced restaurant environment.'
+  },
+  'Coachability': {
+    tier: 'Foundation',
+    guidance: [
+      { tip: 'After receiving feedback, say "Thank you — I\'m going to work on that" before explaining anything. Let the feedback land first.' },
+      { tip: 'Pick one piece of feedback you\'ve received this month. Write down specifically what you\'ll do differently, then track yourself for a week.' },
+      { tip: 'Ask your trainer or leader: "What\'s one thing I could do better?" Do this once per week.' },
+      { tip: 'When you catch yourself getting defensive, pause and ask: "What part of this is true?" There\'s almost always something useful.' }
+    ],
+    aiPrompt: 'I\'m working on receiving feedback better at my Chick-fil-A restaurant. Recently I got feedback about [describe the feedback], and I [describe your reaction — e.g., "felt defensive" or "wasn\'t sure how to apply it"]. Help me: (1) Identify what triggered my reaction. (2) Find the useful truth in the feedback. (3) Come up with a specific action plan for my next 3 shifts.'
+  },
+  'Teamwork': {
+    tier: 'Foundation',
+    guidance: [
+      { tip: 'During training, check in with your trainee every 15 minutes: "How are you feeling about this? What questions do you have?"' },
+      { tip: 'Practice "thinking out loud" when you do tasks — explain your reasoning so the trainee learns the why, not just the what.' },
+      { tip: 'When it gets busy, resist the urge to take over. Coach your trainee through it instead: "You\'ve got this. Here\'s what to focus on."' },
+      { tip: 'After every training shift, give your trainee one specific thing they did well and one thing to work on. Be concrete.' }
+    ],
+    aiPrompt: 'I\'m a Certified Trainer at Chick-fil-A working on creating a better team climate during training. I sometimes [describe your challenge — e.g., "take over when it gets busy" or "struggle to share leadership"]. Help me plan my approach for my next training shift: (1) How do I set the trainee up for success before rush? (2) What do I do when I\'m tempted to take over? (3) How do I debrief the shift in a way that builds their confidence?'
+  },
+  'Caring (Deepened)': {
+    tier: 'Foundation',
+    guidance: [
+      { tip: 'Before each training shift, think about where your trainee is emotionally — not just operationally. Adjust your approach accordingly.' },
+      { tip: 'Notice when a trainee is struggling but not saying anything. Name what you see: "I notice you seem frustrated — what\'s going on?"' },
+      { tip: 'Celebrate small wins explicitly: "You handled that rush really well. I noticed you [specific behavior]."' },
+      { tip: 'Follow up with former trainees. A quick "How\'s it going?" shows that your care didn\'t end when training did.' }
+    ],
+    aiPrompt: 'I\'m a Certified Trainer at Chick-fil-A developing deeper relational care with the people I train. I want to move beyond just task training to genuinely investing in people. Help me think through: (1) How do I notice and respond to a trainee\'s emotional state during a shift? (2) What\'s the difference between being nice and genuinely caring about someone\'s development? (3) Give me 3 practical ways to show care that go beyond "good job" and actually build the trainee\'s confidence.'
+  },
+  'Caring (Baseline)': {
+    tier: 'Foundation',
+    guidance: [
+      { tip: 'Greet your teammates at the start of every shift. A simple "Hey, good to see you" goes a long way.' },
+      { tip: 'When a guest needs something, handle it with genuine warmth — even if you\'re tired or it\'s the end of your shift.' },
+      { tip: 'Notice when a teammate is having a hard day. You don\'t have to fix it — just acknowledging it matters.' }
+    ],
+    aiPrompt: 'I\'m working at Chick-fil-A and want to bring consistent warmth to my shifts — even on the hard days. Help me come up with 2-3 simple habits that help me stay caring and present with guests and teammates, even during busy or stressful times.'
+  },
+  'Coachability (Baseline)': {
+    tier: 'Foundation',
+    guidance: [
+      { tip: 'When your leader gives you feedback, focus on listening first. You can ask questions after — but let them finish.' },
+      { tip: 'Pick one thing your leader has asked you to work on. Focus on just that one thing for a week.' },
+      { tip: 'If you\'re unsure how to improve, ask: "Can you show me what that looks like?" Seeing it is often easier than hearing it.' }
+    ],
+    aiPrompt: 'I\'m working at Chick-fil-A and received some feedback from my leader about [describe feedback]. I want to take it seriously and show improvement. Help me figure out one specific thing I can do differently on my next shift to demonstrate that I\'m applying this feedback.'
+  }
+};
+
+const MENTORING_CADENCE = {
+  'Team Leader': [
+    { freq: 'Weekly', detail: '15-min check-in with Director (can be during shift overlap)' },
+    { freq: 'Monthly', detail: '30-min development conversation with Director — review competency growth, discuss what they\'re learning, identify one area to focus on next month' },
+    { freq: 'Quarterly', detail: 'Formal competency check-in using the mastery thresholds — where are they on the 4-level scale?' }
+  ],
+  'Asst Director': [
+    { freq: 'Bi-weekly', detail: '30-min coaching conversation with Director or Operator — focused on one competency area at a time' },
+    { freq: 'Monthly', detail: 'Project review — what systems, processes, or initiatives are they owning? What\'s the impact?' },
+    { freq: 'Quarterly', detail: 'Formal competency assessment + development plan update' }
+  ],
+  'Director': [
+    { freq: 'Monthly', detail: '1-hour coaching conversation with Operator — strategic topics, competency development, leadership challenges' },
+    { freq: 'Quarterly', detail: 'Formal competency assessment + review of team development (how are their leaders growing?)' },
+    { freq: 'Annually', detail: 'Comprehensive review including 360-style feedback from peers and direct reports' }
+  ]
+};
+
+const PROJECT_LEARNING = {
+  'Asst Director': [
+    { comp: 'Mentoring', project: 'Own a Team Leader\'s 90-day development plan end-to-end' },
+    { comp: 'Integrity', project: 'Lead a "values reset" conversation with their team after identifying a drift' },
+    { comp: 'Decisions', project: 'Own a scheduling redesign for one daypart, present recommendations with data' },
+    { comp: 'Results', project: 'Identify and permanently solve one recurring operational problem, document the before/after' }
+  ],
+  'Director': [
+    { comp: 'Vision', project: 'Draft and deliver a quarterly vision talk to the full team' },
+    { comp: 'Strategy', project: 'Conduct a competitive analysis of the local market and present strategic recommendations' },
+    { comp: 'Balance', project: 'Design and implement a sustainable staffing model that reduces Director hours without sacrificing results' }
+  ]
+};
+
+const DEV_TIME = [
+  { tier: 'Team Leader', time: '~30 min/week', format: 'Self-directed from resource menu + monthly coaching conversation with Director' },
+  { tier: 'Asst Director', time: '~45-60 min/week', format: 'Self-directed from resource menu + bi-weekly coaching conversation with Director/Operator' },
+  { tier: 'Director', time: '~1-2 hrs/week', format: 'Self-directed + project-based learning + monthly coaching with Operator' }
+];
+
+/* ══════════════════════════════════════
    BFS PATHFINDING
    ══════════════════════════════════════ */
 function findPath(fromId, toId) {
@@ -1841,10 +2496,11 @@ function showOptions(roleId) {
 
   body.innerHTML = html;
 
-  // Show options view, hide welcome
+  // Show options view, hide others
   document.getElementById('welcome-view').style.display = 'none';
   document.getElementById('options-view-wrapper').style.display = '';
   document.getElementById('roadmapView').classList.remove('visible');
+  document.getElementById('library-view-wrapper').style.display = 'none';
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -1961,11 +2617,14 @@ function showRoadmap() {
   document.getElementById('welcome-view').style.display = 'none';
   document.getElementById('options-view-wrapper').style.display = 'none';
   document.getElementById('roadmapView').classList.add('visible');
+  document.getElementById('library-view-wrapper').style.display = 'none';
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function renderCompetency(c) {
   const rubricId = 'rubric-' + Math.random().toString(36).substr(2, 8);
+  const resId = 'res-' + Math.random().toString(36).substr(2, 8);
+  const res = RESOURCES[c.name];
   return `
     <div class="comp-item">
       <div class="comp-name">${c.name}</div>
@@ -1973,6 +2632,7 @@ function renderCompetency(c) {
       <button class="rubric-toggle" onclick="toggleRubric('${rubricId}', this)">
         See full rubric \u25b8
       </button>
+      ${res ? `<button class="resource-toggle" onclick="toggleResource('${resId}', this)">Development resources \u25b8</button>` : ''}
       <div class="rubric-body" id="${rubricId}">
         <div class="rubric-grid">
           ${c.rubric.map(r => `
@@ -1983,8 +2643,50 @@ function renderCompetency(c) {
           `).join('')}
         </div>
       </div>
+      ${res ? `<div class="resource-body" id="${resId}"><div class="resource-content">${renderInlineResources(res)}</div></div>` : ''}
     </div>
   `;
+}
+
+function renderInlineResources(res) {
+  let html = '';
+  if (res.guidance) {
+    // Foundation tier — guidance items
+    html += res.guidance.map(g => `<div class="guidance-item">${g.tip}</div>`).join('');
+  }
+  if (res.resources) {
+    const types = [
+      { key: 'book', label: 'Books', icon: '\uD83D\uDCD6' },
+      { key: 'video', label: 'Videos / Talks', icon: '\uD83C\uDFAC' },
+      { key: 'podcast', label: 'Podcasts', icon: '\uD83C\uDFA7' }
+    ];
+    types.forEach(t => {
+      const items = res.resources.filter(r => r.type === t.key);
+      if (items.length === 0) return;
+      html += `<div class="resource-section">
+        <div class="resource-type-label"><span class="rt-icon">${t.icon}</span> ${t.label}</div>
+        ${items.map(r => `<div class="resource-item">
+          <span class="ri-title">${r.title}</span> — <span class="ri-author">${r.author}</span>
+          ${r.detail ? ` <span class="ri-detail">(${r.detail})</span>` : ''}
+          <div class="ri-why">${r.why}</div>
+          ${r.url ? `<a href="${r.url}" target="_blank" rel="noopener">Find it \u2192</a>` : ''}
+        </div>`).join('')}
+      </div>`;
+    });
+  }
+  if (res.aiPrompt) {
+    html += `<div class="ai-prompt-callout">
+      <div class="apc-label">\uD83E\uDD16 AI Reflection Prompt</div>
+      <div class="apc-text">"${res.aiPrompt}"</div>
+    </div>`;
+  }
+  return html;
+}
+
+function toggleResource(id, btn) {
+  const body = document.getElementById(id);
+  const isOpen = body.classList.toggle('open');
+  btn.textContent = isOpen ? 'Hide resources \u25be' : 'Development resources \u25b8';
 }
 
 /* ══════════════════════════════════════
@@ -2002,18 +2704,156 @@ function toggleRubric(id, btn) {
 }
 
 /* ══════════════════════════════════════
+   SCREEN 4: RENDER LIBRARY
+   ══════════════════════════════════════ */
+function renderLibrary() {
+  const body = document.getElementById('libraryBody');
+  if (body.dataset.rendered) return; // only render once
+  body.dataset.rendered = '1';
+
+  let html = '';
+
+  // How to use
+  html += `<div class="library-section" id="lib-how">
+    <div class="library-section-title">How to Use These Resources</div>
+    <ol class="how-to-steps">
+      <li>Leader and evaluator identify the competency to develop (from the mastery thresholds)</li>
+      <li>Leader picks 1-2 resources from the menu in whatever format suits them</li>
+      <li>Leader engages with the resource (~30 min)</li>
+      <li>Leader reflects — using the AI prompt, journaling, or conversation with their evaluator</li>
+      <li>Leader applies — identifies one specific thing to practice on their next shift</li>
+    </ol>
+    <div class="library-section-desc">People learn differently. Some read. Some watch. Some listen. Some process best by talking it through with AI. Rather than forcing one method, each competency offers a resource menu.</div>
+  </div>`;
+
+  // Development time
+  html += `<div class="library-section" id="lib-time">
+    <div class="library-section-title">Development Time by Tier</div>
+    <table class="dev-time-table">
+      <thead><tr><th>Tier</th><th>Weekly Time</th><th>Format</th></tr></thead>
+      <tbody>${DEV_TIME.map(d => `<tr><td>${d.tier}</td><td>${d.time}</td><td>${d.format}</td></tr>`).join('')}</tbody>
+    </table>
+  </div>`;
+
+  // Quick nav
+  html += `<div class="library-nav">
+    <a href="#lib-tl">Team Leader</a>
+    <a href="#lib-ad">Asst Director</a>
+    <a href="#lib-dir">Director</a>
+    <a href="#lib-found">Foundation</a>
+    <a href="#lib-cadence">Mentoring Cadence</a>
+    <a href="#lib-projects">Project Learning</a>
+    <a href="#lib-ai">Using AI</a>
+  </div>`;
+
+  // Tier groups
+  const tiers = [
+    { id: 'lib-tl', title: 'Team Leader Resources', desc: 'Structured development kicks in at Team Leader. ~30 min/week self-directed.', comps: ['Interpersonal', 'Courage', 'Composure'] },
+    { id: 'lib-ad', title: 'Asst Director Resources', desc: '~45-60 min/week self-directed + bi-weekly coaching.', comps: ['Mentoring', 'Integrity', 'Decisions', 'Results'] },
+    { id: 'lib-dir', title: 'Director Resources', desc: '~1-2 hrs/week self-directed + project-based learning.', comps: ['Vision', 'Strategy', 'Balance'] },
+    { id: 'lib-found', title: 'Foundation Resources', desc: 'For TM and Trainer tiers, development IS the work. These practical tips support growth through daily operations.', comps: ['Caring', 'Coachability', 'Teamwork', 'Caring (Deepened)', 'Caring (Baseline)', 'Coachability (Baseline)'] }
+  ];
+
+  tiers.forEach(tier => {
+    html += `<div class="library-section" id="${tier.id}">
+      <div class="library-section-title">${tier.title}</div>
+      <div class="library-section-desc">${tier.desc}</div>`;
+    tier.comps.forEach(name => {
+      const res = RESOURCES[name];
+      if (!res) return;
+      html += `<div class="library-comp-group">
+        <div class="library-comp-name">${name}</div>
+        ${renderInlineResources(res)}
+      </div>`;
+    });
+    html += '</div>';
+  });
+
+  // Mentoring cadence
+  html += `<div class="library-section" id="lib-cadence">
+    <div class="library-section-title">Structured Mentoring Cadence</div>
+    <div class="library-section-desc">Beyond self-directed resources, each tier has a structured coaching rhythm.</div>`;
+  Object.entries(MENTORING_CADENCE).forEach(([role, items]) => {
+    html += `<div class="cadence-group">
+      <div class="cadence-role">${role}</div>
+      ${items.map(i => `<div class="cadence-item"><span class="cadence-freq">${i.freq}</span><span class="cadence-detail">${i.detail}</span></div>`).join('')}
+    </div>`;
+  });
+  html += '</div>';
+
+  // Project-based learning
+  html += `<div class="library-section" id="lib-projects">
+    <div class="library-section-title">Project-Based Learning</div>
+    <div class="library-section-desc">For Asst Director and Director tiers, real projects accelerate development more than any book.</div>`;
+  Object.entries(PROJECT_LEARNING).forEach(([role, items]) => {
+    html += `<div class="cadence-group">
+      <div class="cadence-role">${role} Projects</div>
+      ${items.map(i => `<div class="project-item"><span class="project-comp">${i.comp}</span><span>${i.project}</span></div>`).join('')}
+    </div>`;
+  });
+  html += '</div>';
+
+  // Using AI
+  html += `<div class="library-section" id="lib-ai">
+    <div class="library-section-title">Using AI as a Development Tool</div>
+    <div class="library-section-desc">Encourage leaders to use AI as a thinking partner for their development. The key principle: AI is a thinking partner, not a replacement for the work.</div>
+    <ol class="how-to-steps">
+      <li><strong>Scenario practice</strong> — "Here's a hard conversation I need to have. Help me prepare."</li>
+      <li><strong>Concept exploration</strong> — "Explain the Hedgehog Concept from Good to Great and help me apply it to our restaurant."</li>
+      <li><strong>Reflection processing</strong> — "Here's what happened on my shift today. Help me think through what I could have done differently."</li>
+      <li><strong>Development planning</strong> — "I'm working on my Courage competency. Based on my situation, what should I focus on this month?"</li>
+      <li><strong>Resource discovery</strong> — "I just finished Dare to Lead. What should I read/watch/listen to next?"</li>
+    </ol>
+  </div>`;
+
+  body.innerHTML = html;
+}
+
+/* ══════════════════════════════════════
    NAVIGATION
    ══════════════════════════════════════ */
+let previousScreen = 'welcome'; // tracks where user came from before library
+
 function showWelcome() {
   document.getElementById('welcome-view').style.display = '';
   document.getElementById('options-view-wrapper').style.display = 'none';
   document.getElementById('roadmapView').classList.remove('visible');
+  document.getElementById('library-view-wrapper').style.display = 'none';
   currentRole = null;
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function backToOptions() {
   if (currentRole) {
+    showOptions(currentRole);
+  } else {
+    showWelcome();
+  }
+}
+
+function showLibrary() {
+  // Remember where user was
+  if (document.getElementById('roadmapView').classList.contains('visible')) {
+    previousScreen = 'roadmap';
+  } else if (document.getElementById('options-view-wrapper').style.display !== 'none') {
+    previousScreen = 'options';
+  } else {
+    previousScreen = 'welcome';
+  }
+
+  document.getElementById('welcome-view').style.display = 'none';
+  document.getElementById('options-view-wrapper').style.display = 'none';
+  document.getElementById('roadmapView').classList.remove('visible');
+  document.getElementById('library-view-wrapper').style.display = '';
+  renderLibrary();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function backFromLibrary() {
+  document.getElementById('library-view-wrapper').style.display = 'none';
+  if (previousScreen === 'roadmap' && selectedFrom && selectedTo) {
+    showRoadmap();
+  } else if (previousScreen === 'options' && currentRole) {
     showOptions(currentRole);
   } else {
     showWelcome();
