@@ -492,6 +492,26 @@ button {
   color: #fff;
 }
 
+/* Seat availability note */
+.seat-note {
+  display: flex;
+  align-items: flex-start;
+  gap: .5rem;
+  background: linear-gradient(135deg, #FFF8F0, #FFF3E6);
+  border-left: 3px solid var(--gold);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: .65rem .85rem;
+  font-size: .82rem;
+  color: var(--charcoal-light);
+  line-height: 1.45;
+  margin-bottom: .75rem;
+}
+.seat-note::before {
+  content: '\26A0';
+  flex-shrink: 0;
+  font-size: .9rem;
+}
+
 /* Placeholder note */
 .placeholder-note {
   font-size: .85rem;
@@ -889,21 +909,24 @@ const ROLES = {
     rank: 4, badgeClass: 'badge-leadership',
     tagline: 'Lead through accountability',
     path: 'leadership',
-    description: "You run the systems behind the scenes — scheduling, staffing, food cost — and develop the leaders on your team."
+    description: "You run the systems behind the scenes — scheduling, staffing, food cost — and develop the leaders on your team.",
+    seatNote: "Limited to one per team. Build the competencies now so you're ready when the opportunity opens."
   },
   opsDir: {
     id: 'opsDir', name: 'Ops Director', shortName: 'OD',
     rank: 5, badgeClass: 'badge-leadership',
     tagline: 'Lead through direction',
     path: 'leadership',
-    description: "You lead restaurant operations — setting direction, building systems, and leading a team of leaders."
+    description: "You lead restaurant operations — setting direction, building systems, and leading a team of leaders.",
+    seatNote: "Limited to one per team. Build the competencies now so you're ready when the opportunity opens."
   },
   spcDir: {
     id: 'spcDir', name: 'Specialty Director', shortName: 'SD',
     rank: 5, badgeClass: 'badge-leadership',
     tagline: 'Lead through direction',
     path: 'leadership',
-    description: "You lead a specialty function like Talent or Catering, setting direction across teams."
+    description: "You lead a specialty function like Talent or Catering, setting direction across teams.",
+    seatNote: "Currently one seat (Talent Director). Build the competencies now so you're ready when the opportunity opens."
   },
   specTrainer: {
     id: 'specTrainer', name: 'Specialized Trainer', shortName: 'ST',
@@ -1761,6 +1784,7 @@ function showOptions(roleId) {
           ${trans ? `<span class="runway-badge">~${trans.runway}</span>` : ''}
         </div>
         <div class="option-card-desc">${desc}</div>
+        ${target.seatNote ? `<div class="seat-note">${target.seatNote}</div>` : ''}
         ${further ? `<div class="option-further">${further}</div>` : ''}
         ${isPlaceholder
           ? `<div class="placeholder-note">${trans.placeholderNote}</div>`
@@ -1799,7 +1823,7 @@ function showOptions(roleId) {
       html += `<div class="further-card">
         <div class="further-card-info">
           <div class="further-card-name">${target.name}</div>
-          <div class="further-card-meta">${ft.steps} step${ft.steps !== 1 ? 's' : ''} &middot; ~${runwayText}</div>
+          <div class="further-card-meta">${ft.steps} step${ft.steps !== 1 ? 's' : ''} &middot; ~${runwayText}${target.seatNote ? ' &middot; Limited seats' : ''}</div>
         </div>
         ${isPlaceholder
           ? ''
