@@ -818,17 +818,6 @@ button {
   margin-left: .75rem;
 }
 .resource-toggle:hover { color: var(--red); }
-.resource-body {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height .3s var(--ease);
-}
-.resource-body.open {
-  max-height: 3000px;
-}
-.resource-content {
-  padding: .5rem 0 .25rem;
-}
 
 /* Resource section grouping */
 .resource-section {
@@ -950,53 +939,7 @@ button {
 .persistent-link a:hover { color: var(--red); }
 .persistent-link a svg { width: 14px; height: 14px; }
 
-/* ── Library View ── */
-.library-view {
-  display: none;
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 0 clamp(1rem, 3vw, 2rem) 4rem;
-}
-.library-view.visible { display: block; }
-
-.library-header {
-  background: linear-gradient(165deg, var(--charcoal) 0%, #1a1a1a 40%, var(--red-dark) 100%);
-  color: #fff;
-  padding: clamp(2rem, 5vw, 3rem) clamp(1rem, 4vw, 2rem) 1.5rem;
-  position: relative;
-  overflow: hidden;
-}
-.library-header::before {
-  content: '';
-  position: absolute; top: -50%; right: -20%; width: 70%; height: 200%;
-  background: radial-gradient(ellipse, rgba(200,16,46,.15) 0%, transparent 70%);
-  pointer-events: none;
-}
-.library-header h2 { color: #fff; margin-bottom: .35rem; position: relative; z-index: 1; }
-.library-header p { color: rgba(255,255,255,.7); font-size: .95rem; position: relative; z-index: 1; }
-
-.library-back {
-  display: inline-flex;
-  align-items: center;
-  gap: .4rem;
-  padding: .5rem .75rem;
-  font-size: .88rem;
-  font-weight: 600;
-  color: rgba(255,255,255,.7);
-  border-radius: var(--radius);
-  transition: color .15s;
-  margin-bottom: .75rem;
-  position: relative;
-  z-index: 1;
-  background: none; border: none;
-  cursor: pointer;
-}
-.library-back:hover { color: #fff; }
-.library-back svg { width: 16px; height: 16px; }
-
-.library-body {
-  padding: 1.5rem 0;
-}
+/* Library content (used inside modal) */
 
 /* Quick-jump nav */
 .library-nav {
@@ -1180,6 +1123,84 @@ button {
 }
 
 /* ══════════════════════════════════════
+   MODAL
+   ══════════════════════════════════════ */
+.modal-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.45);
+  z-index: 1000;
+  justify-content: center;
+  align-items: flex-start;
+  padding: clamp(.75rem, 3vw, 2.5rem);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.modal-backdrop.active {
+  display: flex;
+}
+.modal-container {
+  background: var(--warm-white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  width: 100%;
+  max-width: 640px;
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  animation: modalIn .2s var(--ease);
+  margin: auto 0;
+}
+@keyframes modalIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: .85rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  gap: .75rem;
+}
+.modal-header h3 {
+  font-size: 1rem;
+  margin: 0;
+  min-width: 0;
+}
+.modal-close {
+  width: 32px; height: 32px;
+  min-width: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--text-light);
+  border-radius: 50%;
+  transition: all .15s;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+.modal-close:hover {
+  background: var(--cream-dark);
+  color: var(--charcoal);
+}
+.modal-body {
+  overflow-y: auto;
+  padding: 1.25rem;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Library modal gets wider */
+.modal-container.modal-wide {
+  max-width: 780px;
+}
+
+/* ══════════════════════════════════════
    UTILITY
    ══════════════════════════════════════ */
 .sr-only {
@@ -1212,7 +1233,7 @@ button {
       </div>
 
       <div class="welcome-library-wrap">
-        <button class="welcome-library-btn" onclick="showLibrary()">
+        <button class="welcome-library-btn" onclick="openLibraryModal()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
           Development Resource Library
         </button>
@@ -1235,7 +1256,7 @@ button {
   <!-- SCREEN 2: Your Options -->
   <div id="options-view-wrapper" style="display:none;">
     <div class="persistent-link">
-      <a href="#" onclick="showLibrary(); return false;">
+      <a href="#" onclick="openLibraryModal(); return false;">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
         Resource Library
       </a>
@@ -1259,7 +1280,7 @@ button {
   <!-- SCREEN 3: Roadmap Stepper -->
   <div class="roadmap-view" id="roadmapView">
     <div class="persistent-link" id="roadmapLibLink">
-      <a href="#" onclick="showLibrary(); return false;">
+      <a href="#" onclick="openLibraryModal(); return false;">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
         Resource Library
       </a>
@@ -1275,21 +1296,17 @@ button {
     <div class="timeline" id="timeline"></div>
   </div>
 
-  <!-- SCREEN 4: Resource Library -->
-  <div id="library-view-wrapper" style="display:none;">
-    <div class="library-header">
-      <button class="library-back" onclick="backFromLibrary()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-        Back
-      </button>
-      <h2>Development Resource Library</h2>
-      <p>Books, videos, podcasts, and AI reflection prompts for every competency.</p>
+
+</div>
+
+<!-- Modal overlay (shared by rubrics, resources, library) -->
+<div class="modal-backdrop" id="modalBackdrop" onclick="closeModal()">
+  <div class="modal-container" id="modalContainer" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <h3 id="modalTitle"></h3>
+      <button class="modal-close" onclick="closeModal()">&times;</button>
     </div>
-    <div class="library-view visible" id="libraryView">
-      <div class="library-body" id="libraryBody">
-        <!-- Rendered by JS -->
-      </div>
-    </div>
+    <div class="modal-body" id="modalBody"></div>
   </div>
 </div>
 
@@ -2500,7 +2517,7 @@ function showOptions(roleId) {
   document.getElementById('welcome-view').style.display = 'none';
   document.getElementById('options-view-wrapper').style.display = '';
   document.getElementById('roadmapView').classList.remove('visible');
-  document.getElementById('library-view-wrapper').style.display = 'none';
+
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -2617,35 +2634,46 @@ function showRoadmap() {
   document.getElementById('welcome-view').style.display = 'none';
   document.getElementById('options-view-wrapper').style.display = 'none';
   document.getElementById('roadmapView').classList.add('visible');
-  document.getElementById('library-view-wrapper').style.display = 'none';
+
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+const _modalData = {};
+
 function renderCompetency(c) {
-  const rubricId = 'rubric-' + Math.random().toString(36).substr(2, 8);
-  const resId = 'res-' + Math.random().toString(36).substr(2, 8);
+  const uid = 'c-' + Math.random().toString(36).substr(2, 8);
+  _modalData[uid] = c;
   const res = RESOURCES[c.name];
   return `
     <div class="comp-item">
       <div class="comp-name">${c.name}</div>
       <div class="comp-desc">${c.description}</div>
-      <button class="rubric-toggle" onclick="toggleRubric('${rubricId}', this)">
+      <button class="rubric-toggle" onclick="openRubricModal('${uid}')">
         See full rubric \u25b8
       </button>
-      ${res ? `<button class="resource-toggle" onclick="toggleResource('${resId}', this)">Development resources \u25b8</button>` : ''}
-      <div class="rubric-body" id="${rubricId}">
-        <div class="rubric-grid">
-          ${c.rubric.map(r => `
-            <div class="rubric-level${r.graduation ? ' graduation' : ''}">
-              <div class="rl-label">Level ${r.level} \u2014 ${r.label}${r.graduation ? ' \u2190 Graduation' : ''}</div>
-              ${r.text}
-            </div>
-          `).join('')}
-        </div>
-      </div>
-      ${res ? `<div class="resource-body" id="${resId}"><div class="resource-content">${renderInlineResources(res)}</div></div>` : ''}
+      ${res ? `<button class="resource-toggle" onclick="openResourceModal('${uid}')">Development resources \u25b8</button>` : ''}
     </div>
   `;
+}
+
+function openRubricModal(uid) {
+  const c = _modalData[uid];
+  const html = `<div class="rubric-grid">
+    ${c.rubric.map(r => `
+      <div class="rubric-level${r.graduation ? ' graduation' : ''}">
+        <div class="rl-label">Level ${r.level} \u2014 ${r.label}${r.graduation ? ' \u2190 Graduation' : ''}</div>
+        ${r.text}
+      </div>
+    `).join('')}
+  </div>`;
+  openModal(c.name + ' \u2014 Rubric', html);
+}
+
+function openResourceModal(uid) {
+  const c = _modalData[uid];
+  const res = RESOURCES[c.name];
+  if (!res) return;
+  openModal(c.name + ' \u2014 Resources', renderInlineResources(res));
 }
 
 function renderInlineResources(res) {
@@ -2683,38 +2711,46 @@ function renderInlineResources(res) {
   return html;
 }
 
-function toggleResource(id, btn) {
-  const body = document.getElementById(id);
-  const isOpen = body.classList.toggle('open');
-  btn.textContent = isOpen ? 'Hide resources \u25be' : 'Development resources \u25b8';
-}
-
 /* ══════════════════════════════════════
-   EXPAND / COLLAPSE
+   EXPAND / COLLAPSE (competency & ops accordions)
    ══════════════════════════════════════ */
 function toggleExpand(btn) {
   const section = btn.closest('.expand-section');
   section.classList.toggle('open');
 }
 
-function toggleRubric(id, btn) {
-  const body = document.getElementById(id);
-  const isOpen = body.classList.toggle('open');
-  btn.textContent = isOpen ? 'Hide rubric \u25be' : 'See full rubric \u25b8';
+/* ══════════════════════════════════════
+   MODAL SYSTEM
+   ══════════════════════════════════════ */
+function openModal(title, contentHtml, wide) {
+  document.getElementById('modalTitle').textContent = title;
+  document.getElementById('modalBody').innerHTML = contentHtml;
+  const container = document.getElementById('modalContainer');
+  container.classList.toggle('modal-wide', !!wide);
+  document.getElementById('modalBackdrop').classList.add('active');
+  document.body.style.overflow = 'hidden';
 }
 
-/* ══════════════════════════════════════
-   SCREEN 4: RENDER LIBRARY
-   ══════════════════════════════════════ */
-function renderLibrary() {
-  const body = document.getElementById('libraryBody');
-  if (body.dataset.rendered) return; // only render once
-  body.dataset.rendered = '1';
+function closeModal() {
+  document.getElementById('modalBackdrop').classList.remove('active');
+  document.body.style.overflow = '';
+}
 
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeModal();
+});
+
+/* ══════════════════════════════════════
+   LIBRARY (renders into modal)
+   ══════════════════════════════════════ */
+let _libraryHtml = null;
+
+function getLibraryHtml() {
+  if (_libraryHtml) return _libraryHtml;
   let html = '';
 
   // How to use
-  html += `<div class="library-section" id="lib-how">
+  html += `<div class="library-section">
     <div class="library-section-title">How to Use These Resources</div>
     <ol class="how-to-steps">
       <li>Leader and evaluator identify the competency to develop (from the mastery thresholds)</li>
@@ -2727,7 +2763,7 @@ function renderLibrary() {
   </div>`;
 
   // Development time
-  html += `<div class="library-section" id="lib-time">
+  html += `<div class="library-section">
     <div class="library-section-title">Development Time by Tier</div>
     <table class="dev-time-table">
       <thead><tr><th>Tier</th><th>Weekly Time</th><th>Format</th></tr></thead>
@@ -2735,27 +2771,16 @@ function renderLibrary() {
     </table>
   </div>`;
 
-  // Quick nav
-  html += `<div class="library-nav">
-    <a href="#lib-tl">Team Leader</a>
-    <a href="#lib-ad">Asst Director</a>
-    <a href="#lib-dir">Director</a>
-    <a href="#lib-found">Foundation</a>
-    <a href="#lib-cadence">Mentoring Cadence</a>
-    <a href="#lib-projects">Project Learning</a>
-    <a href="#lib-ai">Using AI</a>
-  </div>`;
-
   // Tier groups
   const tiers = [
-    { id: 'lib-tl', title: 'Team Leader Resources', desc: 'Structured development kicks in at Team Leader. ~30 min/week self-directed.', comps: ['Interpersonal', 'Courage', 'Composure'] },
-    { id: 'lib-ad', title: 'Asst Director Resources', desc: '~45-60 min/week self-directed + bi-weekly coaching.', comps: ['Mentoring', 'Integrity', 'Decisions', 'Results'] },
-    { id: 'lib-dir', title: 'Director Resources', desc: '~1-2 hrs/week self-directed + project-based learning.', comps: ['Vision', 'Strategy', 'Balance'] },
-    { id: 'lib-found', title: 'Foundation Resources', desc: 'For TM and Trainer tiers, development IS the work. These practical tips support growth through daily operations.', comps: ['Caring', 'Coachability', 'Teamwork', 'Caring (Deepened)', 'Caring (Baseline)', 'Coachability (Baseline)'] }
+    { title: 'Team Leader Resources', desc: 'Structured development kicks in at Team Leader. ~30 min/week self-directed.', comps: ['Interpersonal', 'Courage', 'Composure'] },
+    { title: 'Asst Director Resources', desc: '~45-60 min/week self-directed + bi-weekly coaching.', comps: ['Mentoring', 'Integrity', 'Decisions', 'Results'] },
+    { title: 'Director Resources', desc: '~1-2 hrs/week self-directed + project-based learning.', comps: ['Vision', 'Strategy', 'Balance'] },
+    { title: 'Foundation Resources', desc: 'For TM and Trainer tiers, development IS the work. These practical tips support growth through daily operations.', comps: ['Caring', 'Coachability', 'Teamwork', 'Caring (Deepened)', 'Caring (Baseline)', 'Coachability (Baseline)'] }
   ];
 
   tiers.forEach(tier => {
-    html += `<div class="library-section" id="${tier.id}">
+    html += `<div class="library-section">
       <div class="library-section-title">${tier.title}</div>
       <div class="library-section-desc">${tier.desc}</div>`;
     tier.comps.forEach(name => {
@@ -2770,7 +2795,7 @@ function renderLibrary() {
   });
 
   // Mentoring cadence
-  html += `<div class="library-section" id="lib-cadence">
+  html += `<div class="library-section">
     <div class="library-section-title">Structured Mentoring Cadence</div>
     <div class="library-section-desc">Beyond self-directed resources, each tier has a structured coaching rhythm.</div>`;
   Object.entries(MENTORING_CADENCE).forEach(([role, items]) => {
@@ -2782,7 +2807,7 @@ function renderLibrary() {
   html += '</div>';
 
   // Project-based learning
-  html += `<div class="library-section" id="lib-projects">
+  html += `<div class="library-section">
     <div class="library-section-title">Project-Based Learning</div>
     <div class="library-section-desc">For Asst Director and Director tiers, real projects accelerate development more than any book.</div>`;
   Object.entries(PROJECT_LEARNING).forEach(([role, items]) => {
@@ -2794,66 +2819,39 @@ function renderLibrary() {
   html += '</div>';
 
   // Using AI
-  html += `<div class="library-section" id="lib-ai">
+  html += `<div class="library-section">
     <div class="library-section-title">Using AI as a Development Tool</div>
     <div class="library-section-desc">Encourage leaders to use AI as a thinking partner for their development. The key principle: AI is a thinking partner, not a replacement for the work.</div>
     <ol class="how-to-steps">
-      <li><strong>Scenario practice</strong> — "Here's a hard conversation I need to have. Help me prepare."</li>
-      <li><strong>Concept exploration</strong> — "Explain the Hedgehog Concept from Good to Great and help me apply it to our restaurant."</li>
-      <li><strong>Reflection processing</strong> — "Here's what happened on my shift today. Help me think through what I could have done differently."</li>
-      <li><strong>Development planning</strong> — "I'm working on my Courage competency. Based on my situation, what should I focus on this month?"</li>
-      <li><strong>Resource discovery</strong> — "I just finished Dare to Lead. What should I read/watch/listen to next?"</li>
+      <li><strong>Scenario practice</strong> \u2014 "Here's a hard conversation I need to have. Help me prepare."</li>
+      <li><strong>Concept exploration</strong> \u2014 "Explain the Hedgehog Concept from Good to Great and help me apply it to our restaurant."</li>
+      <li><strong>Reflection processing</strong> \u2014 "Here's what happened on my shift today. Help me think through what I could have done differently."</li>
+      <li><strong>Development planning</strong> \u2014 "I'm working on my Courage competency. Based on my situation, what should I focus on this month?"</li>
+      <li><strong>Resource discovery</strong> \u2014 "I just finished Dare to Lead. What should I read/watch/listen to next?"</li>
     </ol>
   </div>`;
 
-  body.innerHTML = html;
+  _libraryHtml = html;
+  return html;
+}
+
+function openLibraryModal() {
+  openModal('Development Resource Library', getLibraryHtml(), true);
 }
 
 /* ══════════════════════════════════════
    NAVIGATION
    ══════════════════════════════════════ */
-let previousScreen = 'welcome'; // tracks where user came from before library
-
 function showWelcome() {
   document.getElementById('welcome-view').style.display = '';
   document.getElementById('options-view-wrapper').style.display = 'none';
   document.getElementById('roadmapView').classList.remove('visible');
-  document.getElementById('library-view-wrapper').style.display = 'none';
   currentRole = null;
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function backToOptions() {
   if (currentRole) {
-    showOptions(currentRole);
-  } else {
-    showWelcome();
-  }
-}
-
-function showLibrary() {
-  // Remember where user was
-  if (document.getElementById('roadmapView').classList.contains('visible')) {
-    previousScreen = 'roadmap';
-  } else if (document.getElementById('options-view-wrapper').style.display !== 'none') {
-    previousScreen = 'options';
-  } else {
-    previousScreen = 'welcome';
-  }
-
-  document.getElementById('welcome-view').style.display = 'none';
-  document.getElementById('options-view-wrapper').style.display = 'none';
-  document.getElementById('roadmapView').classList.remove('visible');
-  document.getElementById('library-view-wrapper').style.display = '';
-  renderLibrary();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-function backFromLibrary() {
-  document.getElementById('library-view-wrapper').style.display = 'none';
-  if (previousScreen === 'roadmap' && selectedFrom && selectedTo) {
-    showRoadmap();
-  } else if (previousScreen === 'options' && currentRole) {
     showOptions(currentRole);
   } else {
     showWelcome();
