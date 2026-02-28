@@ -2180,9 +2180,16 @@ const RESOURCES = {
     aiPrompt: 'I\'m a Director at a Chick-fil-A and I\'m struggling with work-life balance. I\'m at the restaurant [X] hours a week and I feel guilty when I\'m not there. Using Essentialism and \'Free to Focus,\' help me: (1) Identify which of my weekly tasks are \'essential\' vs. \'nonessential\' based on my unique contribution as a Director. (2) Identify 3 things I could delegate to my Assistant Directors. (3) Design a realistic weekly schedule with at least one block for personal reflection and one protected evening for family. (4) Draft a conversation I could have with my Operator about sustainable pace.'
   },
 
-  // ─── Foundation Tier (guidance-based) ───
+  // ─── Foundation Tier ───
   'Caring': {
     tier: 'Foundation',
+    resources: [
+      { type: 'book', title: 'Unreasonable Hospitality', author: 'Will Guidara', detail: '', why: 'The philosophy of making people feel seen. Short, inspiring stories about going above and beyond — directly applicable to how you treat guests and teammates.' },
+      { type: 'book', title: 'Setting the Table', author: 'Danny Meyer', detail: 'Founder of Shake Shack', why: 'The difference between service (what you do) and hospitality (how you make people feel). Written by someone who built a restaurant empire on caring.' },
+      { type: 'video', title: 'The Secret Ingredients of Great Hospitality', author: 'Will Guidara', detail: 'TED', why: 'A short, powerful talk on what genuine hospitality looks like in practice. You\'ll see your own work differently after watching this.', url: 'https://www.youtube.com/results?search_query=Will+Guidara+TED+hospitality' },
+      { type: 'video', title: 'Want to Help Someone? Shut Up and Listen', author: 'Ernesto Sirolli', detail: 'TED', why: 'A funny, powerful talk about why truly caring means listening first — not assuming you know what people need.', url: 'https://www.youtube.com/results?search_query=Ernesto+Sirolli+TED+shut+up+listen' },
+      { type: 'podcast', title: 'Shake Shack: Danny Meyer', author: 'How I Built This with Guy Raz', detail: '', why: 'The real story of building a restaurant culture around genuine care. Relatable and inspiring.', url: 'https://open.spotify.com/search/how%20i%20built%20this%20danny%20meyer' }
+    ],
     guidance: [
       { tip: 'Practice the 5-10-5 rule: make eye contact within 5 feet, greet within 10, and follow up within 5 seconds of interaction.' },
       { tip: 'Learn one personal detail about each teammate you work with this week. Use it naturally in conversation.' },
@@ -2193,6 +2200,13 @@ const RESOURCES = {
   },
   'Coachability': {
     tier: 'Foundation',
+    resources: [
+      { type: 'book', title: 'Mindset', author: 'Carol Dweck', detail: '', why: 'The book that defines growth mindset vs. fixed mindset. Coachability starts with believing you can improve. Short, research-backed, and life-changing.' },
+      { type: 'book', title: 'Thanks for the Feedback', author: 'Douglas Stone and Sheila Heen', detail: 'Ch. 1-3 on the three triggers', why: 'Teaches you how to receive feedback well — not just give it. Identifies the three triggers that make us reject criticism.' },
+      { type: 'video', title: 'The Power of Believing That You Can Improve', author: 'Carol Dweck', detail: 'TED', why: 'Dweck\'s own explanation of growth mindset in 10 minutes. The foundation of everything coachability is built on.', url: 'https://www.youtube.com/results?search_query=Carol+Dweck+TED+growth+mindset' },
+      { type: 'video', title: 'How to Get Better at the Things You Care About', author: 'Eduardo Briceño', detail: 'TED', why: 'Explains why we plateau and how to break through by alternating between "performance zone" and "learning zone." Practical and short.', url: 'https://www.youtube.com/results?search_query=Eduardo+Briceno+TED+get+better' },
+      { type: 'podcast', title: 'How to Use Others\' Feedback to Learn and Grow', author: 'Sheila Heen', detail: 'TEDxAmoskeagMillyard (audio)', why: 'The three triggers that cause us to dismiss feedback — and how to work through them.', url: 'https://open.spotify.com/search/sheila%20heen%20feedback%20learn%20grow' }
+    ],
     guidance: [
       { tip: 'After receiving feedback, say "Thank you — I\'m going to work on that" before explaining anything. Let the feedback land first.' },
       { tip: 'Pick one piece of feedback you\'ve received this month. Write down specifically what you\'ll do differently, then track yourself for a week.' },
@@ -2203,6 +2217,13 @@ const RESOURCES = {
   },
   'Teamwork': {
     tier: 'Foundation',
+    resources: [
+      { type: 'book', title: 'The Ideal Team Player', author: 'Patrick Lencioni', detail: '', why: 'The humble, hungry, and smart framework. Three qualities that make someone great to work with — easy to read, immediately applicable.' },
+      { type: 'book', title: 'The Five Dysfunctions of a Team', author: 'Patrick Lencioni', detail: '', why: 'A short, story-based book on why teams fail: no trust, fear of conflict, lack of commitment, avoiding accountability, ignoring results.' },
+      { type: 'video', title: 'Why Good Leaders Make You Feel Safe', author: 'Simon Sinek', detail: 'TED, 2014', why: 'When leaders create safety, people naturally give their best to the team. Helps you understand why your team climate matters.', url: 'https://www.youtube.com/results?search_query=Simon+Sinek+leaders+feel+safe+TED' },
+      { type: 'video', title: 'Everyday Leadership', author: 'Drew Dudley', detail: 'TEDx, 6 min', why: 'Leadership isn\'t about titles — it\'s about the small moments where you make someone\'s experience better. Perfect for trainers.', url: 'https://www.youtube.com/results?search_query=Drew+Dudley+TEDx+everyday+leadership' },
+      { type: 'podcast', title: 'How to Build a Great Culture (with Danny Meyer)', author: 'WorkLife with Adam Grant', detail: '', why: 'How the best restaurant teams are built through trust and shared ownership.', url: 'https://open.spotify.com/search/worklife%20adam%20grant%20danny%20meyer' }
+    ],
     guidance: [
       { tip: 'During training, check in with your trainee every 15 minutes: "How are you feeling about this? What questions do you have?"' },
       { tip: 'Practice "thinking out loud" when you do tasks — explain your reasoning so the trainee learns the why, not just the what.' },
@@ -2213,6 +2234,13 @@ const RESOURCES = {
   },
   'Caring (Deepened)': {
     tier: 'Foundation',
+    resources: [
+      { type: 'book', title: 'Unreasonable Hospitality', author: 'Will Guidara', detail: '', why: 'Goes beyond basic hospitality into deeply personal care. Full of stories about investing in individuals — exactly what deepened caring looks like.' },
+      { type: 'book', title: 'The Coaching Habit', author: 'Michael Bungay Stanier', detail: '7 essential questions', why: 'Caring about someone\'s development means asking better questions. The "What\'s on your mind?" and "What was most useful?" questions are perfect for trainers.' },
+      { type: 'video', title: 'The Secret Ingredients of Great Hospitality', author: 'Will Guidara', detail: 'TED', why: 'Caring deeply means going beyond the expected. This talk shows what that looks like in practice.', url: 'https://www.youtube.com/results?search_query=Will+Guidara+TED+hospitality' },
+      { type: 'video', title: 'Why Aren\'t We More Compassionate?', author: 'Daniel Goleman', detail: 'TED, 2007', why: 'How being truly present with others — not just going through the motions — creates deeper connection.', url: 'https://www.youtube.com/results?search_query=Daniel+Goleman+TED+compassionate' },
+      { type: 'podcast', title: 'The Three Big Myths of Mentoring', author: 'WorkLife with Adam Grant', detail: '', why: 'Caring deeply about someone\'s development is mentoring. This episode debunks myths about what that actually looks like.', url: 'https://open.spotify.com/search/worklife%20adam%20grant%20mentoring' }
+    ],
     guidance: [
       { tip: 'Before each training shift, think about where your trainee is emotionally — not just operationally. Adjust your approach accordingly.' },
       { tip: 'Notice when a trainee is struggling but not saying anything. Name what you see: "I notice you seem frustrated — what\'s going on?"' },
@@ -2223,6 +2251,10 @@ const RESOURCES = {
   },
   'Caring (Baseline)': {
     tier: 'Foundation',
+    resources: [
+      { type: 'video', title: 'The Secret Ingredients of Great Hospitality', author: 'Will Guidara', detail: 'TED', why: 'Even at the most basic level, caring is about making people feel seen. This short talk makes it click.', url: 'https://www.youtube.com/results?search_query=Will+Guidara+TED+hospitality' },
+      { type: 'video', title: 'Want to Help Someone? Shut Up and Listen', author: 'Ernesto Sirolli', detail: 'TED', why: 'Caring starts with paying attention. This entertaining talk shows why listening is more powerful than doing.', url: 'https://www.youtube.com/results?search_query=Ernesto+Sirolli+TED+shut+up+listen' }
+    ],
     guidance: [
       { tip: 'Greet your teammates at the start of every shift. A simple "Hey, good to see you" goes a long way.' },
       { tip: 'When a guest needs something, handle it with genuine warmth — even if you\'re tired or it\'s the end of your shift.' },
@@ -2232,6 +2264,10 @@ const RESOURCES = {
   },
   'Coachability (Baseline)': {
     tier: 'Foundation',
+    resources: [
+      { type: 'video', title: 'The Power of Believing That You Can Improve', author: 'Carol Dweck', detail: 'TED', why: 'Growth mindset in 10 minutes. If you believe you can get better, feedback becomes fuel instead of criticism.', url: 'https://www.youtube.com/results?search_query=Carol+Dweck+TED+growth+mindset' },
+      { type: 'video', title: 'How to Get Better at the Things You Care About', author: 'Eduardo Briceño', detail: 'TED', why: 'Why we stop improving and how to start again. Short, practical, and motivating.', url: 'https://www.youtube.com/results?search_query=Eduardo+Briceno+TED+get+better' }
+    ],
     guidance: [
       { tip: 'When your leader gives you feedback, focus on listening first. You can ask questions after — but let them finish.' },
       { tip: 'Pick one thing your leader has asked you to work on. Focus on just that one thing for a week.' },
@@ -2733,10 +2769,6 @@ function openResourceModal(uid) {
 
 function renderInlineResources(res) {
   let html = '';
-  if (res.guidance) {
-    // Foundation tier — guidance items
-    html += res.guidance.map(g => `<div class="guidance-item">${g.tip}</div>`).join('');
-  }
   if (res.resources) {
     const types = [
       { key: 'book', label: 'Books', icon: '\uD83D\uDCD6' },
@@ -2756,6 +2788,12 @@ function renderInlineResources(res) {
         </div>`).join('')}
       </div>`;
     });
+  }
+  if (res.guidance) {
+    html += `<div class="resource-section">
+      <div class="resource-type-label"><span class="rt-icon">\u2705</span> Practice Tips</div>
+      ${res.guidance.map(g => `<div class="guidance-item">${g.tip}</div>`).join('')}
+    </div>`;
   }
   if (res.aiPrompt) {
     html += `<div class="ai-prompt-callout">
