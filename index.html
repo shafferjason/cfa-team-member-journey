@@ -939,6 +939,61 @@ button {
 .persistent-link a:hover { color: var(--red); }
 .persistent-link a svg { width: 14px; height: 14px; }
 
+/* Library menu cards */
+.lib-menu {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .6rem;
+}
+@media (max-width: 480px) {
+  .lib-menu { grid-template-columns: 1fr; }
+}
+.lib-menu-card {
+  background: var(--warm-white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: .85rem 1rem;
+  cursor: pointer;
+  transition: all .15s var(--ease);
+  text-align: left;
+  -webkit-tap-highlight-color: transparent;
+}
+.lib-menu-card:hover {
+  border-color: var(--red);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+.lib-menu-card:active { transform: translateY(0); }
+.lib-menu-card .lmc-icon {
+  font-size: 1.1rem;
+  margin-bottom: .25rem;
+}
+.lib-menu-card .lmc-title {
+  font-weight: 600;
+  font-size: .88rem;
+  color: var(--charcoal);
+  margin-bottom: .15rem;
+}
+.lib-menu-card .lmc-meta {
+  font-size: .75rem;
+  color: var(--text-lighter);
+}
+.lib-section-back {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  font-size: .82rem;
+  font-weight: 600;
+  color: var(--text-light);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0 0 .75rem;
+  transition: color .15s;
+}
+.lib-section-back:hover { color: var(--red); }
+.lib-section-back svg { width: 14px; height: 14px; }
+
 /* Library content (used inside modal) */
 
 /* Quick-jump nav */
@@ -2741,45 +2796,54 @@ document.addEventListener('keydown', function(e) {
 });
 
 /* ══════════════════════════════════════
-   LIBRARY (renders into modal)
+   LIBRARY — TWO-LEVEL MODAL
    ══════════════════════════════════════ */
-let _libraryHtml = null;
+const LIB_SECTIONS = [
+  { key: 'howto', icon: '\uD83D\uDCD1', title: 'How to Use Resources', meta: '5-step process + dev time' },
+  { key: 'tl', icon: '\uD83D\uDFE5', title: 'Team Leader', meta: 'Interpersonal, Courage, Composure' },
+  { key: 'ad', icon: '\uD83D\uDFE7', title: 'Asst Director', meta: 'Mentoring, Integrity, Decisions, Results' },
+  { key: 'dir', icon: '\uD83D\uDFEA', title: 'Director', meta: 'Vision, Strategy, Balance' },
+  { key: 'found', icon: '\uD83C\uDF31', title: 'Foundation', meta: 'Caring, Coachability, Teamwork' },
+  { key: 'cadence', icon: '\uD83D\uDD04', title: 'Mentoring Cadence', meta: 'Weekly, monthly, quarterly rhythms' },
+  { key: 'projects', icon: '\uD83D\uDEE0', title: 'Project-Based Learning', meta: 'AD & Director real-world projects' },
+  { key: 'ai', icon: '\uD83E\uDD16', title: 'Using AI', meta: '5 ways to use AI for development' }
+];
 
-function getLibraryHtml() {
-  if (_libraryHtml) return _libraryHtml;
-  let html = '';
+const LIB_TIER_COMPS = {
+  tl: { title: 'Team Leader Resources', desc: 'Structured development kicks in at Team Leader. ~30 min/week self-directed.', comps: ['Interpersonal', 'Courage', 'Composure'] },
+  ad: { title: 'Asst Director Resources', desc: '~45-60 min/week self-directed + bi-weekly coaching.', comps: ['Mentoring', 'Integrity', 'Decisions', 'Results'] },
+  dir: { title: 'Director Resources', desc: '~1-2 hrs/week self-directed + project-based learning.', comps: ['Vision', 'Strategy', 'Balance'] },
+  found: { title: 'Foundation Resources', desc: 'For TM and Trainer tiers, development IS the work. These practical tips support growth through daily operations.', comps: ['Caring', 'Coachability', 'Teamwork', 'Caring (Deepened)', 'Caring (Baseline)', 'Coachability (Baseline)'] }
+};
 
-  // How to use
-  html += `<div class="library-section">
-    <div class="library-section-title">How to Use These Resources</div>
-    <ol class="how-to-steps">
-      <li>Leader and evaluator identify the competency to develop (from the mastery thresholds)</li>
-      <li>Leader picks 1-2 resources from the menu in whatever format suits them</li>
-      <li>Leader engages with the resource (~30 min)</li>
-      <li>Leader reflects — using the AI prompt, journaling, or conversation with their evaluator</li>
-      <li>Leader applies — identifies one specific thing to practice on their next shift</li>
-    </ol>
-    <div class="library-section-desc">People learn differently. Some read. Some watch. Some listen. Some process best by talking it through with AI. Rather than forcing one method, each competency offers a resource menu.</div>
-  </div>`;
+function libBackBtn() {
+  return `<button class="lib-section-back" onclick="showLibraryMenu()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg> All sections</button>`;
+}
 
-  // Development time
-  html += `<div class="library-section">
-    <div class="library-section-title">Development Time by Tier</div>
-    <table class="dev-time-table">
-      <thead><tr><th>Tier</th><th>Weekly Time</th><th>Format</th></tr></thead>
-      <tbody>${DEV_TIME.map(d => `<tr><td>${d.tier}</td><td>${d.time}</td><td>${d.format}</td></tr>`).join('')}</tbody>
-    </table>
-  </div>`;
+function getLibSectionHtml(key) {
+  let html = libBackBtn();
 
-  // Tier groups
-  const tiers = [
-    { title: 'Team Leader Resources', desc: 'Structured development kicks in at Team Leader. ~30 min/week self-directed.', comps: ['Interpersonal', 'Courage', 'Composure'] },
-    { title: 'Asst Director Resources', desc: '~45-60 min/week self-directed + bi-weekly coaching.', comps: ['Mentoring', 'Integrity', 'Decisions', 'Results'] },
-    { title: 'Director Resources', desc: '~1-2 hrs/week self-directed + project-based learning.', comps: ['Vision', 'Strategy', 'Balance'] },
-    { title: 'Foundation Resources', desc: 'For TM and Trainer tiers, development IS the work. These practical tips support growth through daily operations.', comps: ['Caring', 'Coachability', 'Teamwork', 'Caring (Deepened)', 'Caring (Baseline)', 'Coachability (Baseline)'] }
-  ];
-
-  tiers.forEach(tier => {
+  if (key === 'howto') {
+    html += `<div class="library-section">
+      <div class="library-section-title">How to Use These Resources</div>
+      <ol class="how-to-steps">
+        <li>Leader and evaluator identify the competency to develop (from the mastery thresholds)</li>
+        <li>Leader picks 1-2 resources from the menu in whatever format suits them</li>
+        <li>Leader engages with the resource (~30 min)</li>
+        <li>Leader reflects \u2014 using the AI prompt, journaling, or conversation with their evaluator</li>
+        <li>Leader applies \u2014 identifies one specific thing to practice on their next shift</li>
+      </ol>
+      <div class="library-section-desc" style="margin-top:1rem">People learn differently. Some read. Some watch. Some listen. Some process best by talking it through with AI. Rather than forcing one method, each competency offers a resource menu.</div>
+    </div>
+    <div class="library-section">
+      <div class="library-section-title">Development Time by Tier</div>
+      <table class="dev-time-table">
+        <thead><tr><th>Tier</th><th>Weekly Time</th><th>Format</th></tr></thead>
+        <tbody>${DEV_TIME.map(d => `<tr><td>${d.tier}</td><td>${d.time}</td><td>${d.format}</td></tr>`).join('')}</tbody>
+      </table>
+    </div>`;
+  } else if (LIB_TIER_COMPS[key]) {
+    const tier = LIB_TIER_COMPS[key];
     html += `<div class="library-section">
       <div class="library-section-title">${tier.title}</div>
       <div class="library-section-desc">${tier.desc}</div>`;
@@ -2792,51 +2856,71 @@ function getLibraryHtml() {
       </div>`;
     });
     html += '</div>';
-  });
-
-  // Mentoring cadence
-  html += `<div class="library-section">
-    <div class="library-section-title">Structured Mentoring Cadence</div>
-    <div class="library-section-desc">Beyond self-directed resources, each tier has a structured coaching rhythm.</div>`;
-  Object.entries(MENTORING_CADENCE).forEach(([role, items]) => {
-    html += `<div class="cadence-group">
-      <div class="cadence-role">${role}</div>
-      ${items.map(i => `<div class="cadence-item"><span class="cadence-freq">${i.freq}</span><span class="cadence-detail">${i.detail}</span></div>`).join('')}
+  } else if (key === 'cadence') {
+    html += `<div class="library-section">
+      <div class="library-section-title">Structured Mentoring Cadence</div>
+      <div class="library-section-desc">Beyond self-directed resources, each tier has a structured coaching rhythm.</div>`;
+    Object.entries(MENTORING_CADENCE).forEach(([role, items]) => {
+      html += `<div class="cadence-group">
+        <div class="cadence-role">${role}</div>
+        ${items.map(i => `<div class="cadence-item"><span class="cadence-freq">${i.freq}</span><span class="cadence-detail">${i.detail}</span></div>`).join('')}
+      </div>`;
+    });
+    html += '</div>';
+  } else if (key === 'projects') {
+    html += `<div class="library-section">
+      <div class="library-section-title">Project-Based Learning</div>
+      <div class="library-section-desc">For Asst Director and Director tiers, real projects accelerate development more than any book.</div>`;
+    Object.entries(PROJECT_LEARNING).forEach(([role, items]) => {
+      html += `<div class="cadence-group">
+        <div class="cadence-role">${role} Projects</div>
+        ${items.map(i => `<div class="project-item"><span class="project-comp">${i.comp}</span><span>${i.project}</span></div>`).join('')}
+      </div>`;
+    });
+    html += '</div>';
+  } else if (key === 'ai') {
+    html += `<div class="library-section">
+      <div class="library-section-title">Using AI as a Development Tool</div>
+      <div class="library-section-desc">Encourage leaders to use AI as a thinking partner for their development. The key principle: AI is a thinking partner, not a replacement for the work.</div>
+      <ol class="how-to-steps">
+        <li><strong>Scenario practice</strong> \u2014 "Here's a hard conversation I need to have. Help me prepare."</li>
+        <li><strong>Concept exploration</strong> \u2014 "Explain the Hedgehog Concept from Good to Great and help me apply it to our restaurant."</li>
+        <li><strong>Reflection processing</strong> \u2014 "Here's what happened on my shift today. Help me think through what I could have done differently."</li>
+        <li><strong>Development planning</strong> \u2014 "I'm working on my Courage competency. Based on my situation, what should I focus on this month?"</li>
+        <li><strong>Resource discovery</strong> \u2014 "I just finished Dare to Lead. What should I read/watch/listen to next?"</li>
+      </ol>
     </div>`;
-  });
-  html += '</div>';
-
-  // Project-based learning
-  html += `<div class="library-section">
-    <div class="library-section-title">Project-Based Learning</div>
-    <div class="library-section-desc">For Asst Director and Director tiers, real projects accelerate development more than any book.</div>`;
-  Object.entries(PROJECT_LEARNING).forEach(([role, items]) => {
-    html += `<div class="cadence-group">
-      <div class="cadence-role">${role} Projects</div>
-      ${items.map(i => `<div class="project-item"><span class="project-comp">${i.comp}</span><span>${i.project}</span></div>`).join('')}
-    </div>`;
-  });
-  html += '</div>';
-
-  // Using AI
-  html += `<div class="library-section">
-    <div class="library-section-title">Using AI as a Development Tool</div>
-    <div class="library-section-desc">Encourage leaders to use AI as a thinking partner for their development. The key principle: AI is a thinking partner, not a replacement for the work.</div>
-    <ol class="how-to-steps">
-      <li><strong>Scenario practice</strong> \u2014 "Here's a hard conversation I need to have. Help me prepare."</li>
-      <li><strong>Concept exploration</strong> \u2014 "Explain the Hedgehog Concept from Good to Great and help me apply it to our restaurant."</li>
-      <li><strong>Reflection processing</strong> \u2014 "Here's what happened on my shift today. Help me think through what I could have done differently."</li>
-      <li><strong>Development planning</strong> \u2014 "I'm working on my Courage competency. Based on my situation, what should I focus on this month?"</li>
-      <li><strong>Resource discovery</strong> \u2014 "I just finished Dare to Lead. What should I read/watch/listen to next?"</li>
-    </ol>
-  </div>`;
-
-  _libraryHtml = html;
+  }
   return html;
 }
 
+function getLibraryMenuHtml() {
+  return `<div class="lib-menu">
+    ${LIB_SECTIONS.map(s => `
+      <button class="lib-menu-card" onclick="showLibrarySection('${s.key}')">
+        <div class="lmc-icon">${s.icon}</div>
+        <div class="lmc-title">${s.title}</div>
+        <div class="lmc-meta">${s.meta}</div>
+      </button>
+    `).join('')}
+  </div>`;
+}
+
 function openLibraryModal() {
-  openModal('Development Resource Library', getLibraryHtml(), true);
+  openModal('Resource Library', getLibraryMenuHtml(), true);
+}
+
+function showLibraryMenu() {
+  document.getElementById('modalTitle').textContent = 'Resource Library';
+  document.getElementById('modalBody').innerHTML = getLibraryMenuHtml();
+  document.getElementById('modalBody').scrollTop = 0;
+}
+
+function showLibrarySection(key) {
+  const section = LIB_SECTIONS.find(s => s.key === key);
+  document.getElementById('modalTitle').textContent = section ? section.title : 'Resource Library';
+  document.getElementById('modalBody').innerHTML = getLibSectionHtml(key);
+  document.getElementById('modalBody').scrollTop = 0;
 }
 
 /* ══════════════════════════════════════
