@@ -2852,11 +2852,13 @@ function renderInlineResources(res) {
         ${items.map(r => {
           let linkHtml = '';
           if (r.url && r.type === 'podcast') {
-            const term = r.url.split('/search/')[1] || '';
-            const appleUrl = 'https://podcasts.apple.com/search?term=' + term;
+            const rawTerm = decodeURIComponent(r.url.split('/search/')[1] || '');
+            const ytTerm = encodeURIComponent(rawTerm + ' podcast');
+            const appleTerm = encodeURIComponent(rawTerm);
             linkHtml = `<div class="ri-platforms">
               <a href="${r.url}" target="_blank" rel="noopener">Spotify</a>
-              <a href="${appleUrl}" target="_blank" rel="noopener">Apple Podcasts</a>
+              <a href="https://podcasts.apple.com/us/search?term=${appleTerm}" target="_blank" rel="noopener">Apple Podcasts</a>
+              <a href="https://www.youtube.com/results?search_query=${ytTerm}" target="_blank" rel="noopener">YouTube</a>
             </div>`;
           } else if (r.url && r.type === 'video') {
             linkHtml = `<div class="ri-platforms">
