@@ -164,10 +164,11 @@ button {
   width: 36px; height: 36px;
   min-width: 36px;
   border-radius: 50%;
-  font-size: .78rem;
+  font-size: .65rem;
   font-weight: 700;
   color: #fff;
   margin-top: .15rem;
+  letter-spacing: -.01em;
 }
 .role-card .card-body {
   flex: 1;
@@ -1633,7 +1634,7 @@ function renderWelcome() {
     card.dataset.roleId = id;
 
     card.innerHTML = `
-      <span class="card-badge ${role.badgeClass}">${role.rank}</span>
+      <span class="card-badge ${role.badgeClass}">${role.shortName}</span>
       <div class="card-body">
         <div class="card-name">${role.name}</div>
         <div class="card-desc">${role.description}</div>
